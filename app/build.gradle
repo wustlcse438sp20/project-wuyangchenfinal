@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
-
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 
@@ -40,4 +40,23 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:17.2.2'
     implementation 'com.google.firebase:firebase-core:17.0.0'
     implementation 'com.google.android.material:material:1.1.0'
+    //api denpendencies
+    //kotlinx coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.1'
+    //retrofit for REST
+    implementation 'com.squareup.retrofit2:retrofit:2.6.0'
+    //Moshi for type conversion
+    implementation 'com.squareup.retrofit2:converter-moshi:2.6.0'
+    //dependency for viewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0-beta01"
+    //android lifecycle
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+
+    //recycler view
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+
+    //Last Adapter
+    implementation 'com.github.nitrico.lastadapter:lastadapter:2.3.0'
+    kapt 'com.android.databinding:compiler:3.1.4'
+
 }

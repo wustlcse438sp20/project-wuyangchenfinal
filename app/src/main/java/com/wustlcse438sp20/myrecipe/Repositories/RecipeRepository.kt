@@ -1,0 +1,34 @@
+package com.wustlcse438sp20.myrecipe.Repositories
+
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
+import com.wustlcse438sp20.myrecipe.Data.RecipeByIngredients
+import com.wustlcse438sp20.myrecipe.NetworkTools.ApiClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
+
+class RecipeRepository {
+    val service=
+        ApiClient.makeRetrofitService()
+    val apiKey ="28bb80cceac342b298452511c30c732f"
+    fun searchRecipeByIngredients(resBody:MutableLiveData<List<RecipeByIngredients>>, ingredients: String){
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = service.searchRecipeByIngredients(ingredients,apiKey)
+            withContext(Dispatchers.Main){
+                try {
+                    if (response.isSuccessful){
+                        Log.v("aaaa","跑到这里")
+                        resBody.value=response.body()
+                    }
+                }catch (e: HttpException){
+                    println("http error")
+                }
+
+            }
+        }
+    }
+
+}
