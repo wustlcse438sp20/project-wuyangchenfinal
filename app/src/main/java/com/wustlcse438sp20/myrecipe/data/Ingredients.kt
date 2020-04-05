@@ -1,4 +1,4 @@
-package com.wustlcse438sp20.myrecipe.Data
+package com.wustlcse438sp20.myrecipe.data
 
 data class Ingredients (
     val id:Int,
