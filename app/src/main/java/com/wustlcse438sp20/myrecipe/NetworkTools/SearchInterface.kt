@@ -5,6 +5,7 @@ import com.wustlcse438sp20.myrecipe.data.RecipeInformation
 import com.wustlcse438sp20.myrecipe.data.recipesLoad
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface SearchInterface {
@@ -13,5 +14,9 @@ interface SearchInterface {
 
     @GET("random")
     suspend fun searchRecipeByRandom(@Query("number") number:Int,@Query("apiKey") apiKey:String):Response<recipesLoad>
+
+    @GET("{recipeId}/information")
+    suspend fun  searchRecipeInformation(@Path("recipeId") recipeId:Int,@Query("apiKey") apiKey: String):Response<RecipeInformation>
+
 
 }

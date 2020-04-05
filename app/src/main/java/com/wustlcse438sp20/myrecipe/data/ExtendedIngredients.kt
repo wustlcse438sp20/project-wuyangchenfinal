@@ -1,7 +1,8 @@
 package com.wustlcse438sp20.myrecipe.data
 
 data class ExtendedIngredients (
-    val id:Int,
+    //According to test, id may be null
+    val id:Int?,
     val aisle:String,
     val image:String,
     val consistency:String,

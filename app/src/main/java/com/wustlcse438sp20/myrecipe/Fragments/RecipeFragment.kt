@@ -1,5 +1,6 @@
 package com.wustlcse438sp20.myrecipe.Fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,7 +16,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.wustlcse438sp20.myrecipe.Adapter.RecipeAdapter
 import com.wustlcse438sp20.myrecipe.data.RecipeByIngredients
 import com.wustlcse438sp20.myrecipe.R
+import com.wustlcse438sp20.myrecipe.RecipeInformationActivity
 import com.wustlcse438sp20.myrecipe.ViewModels.RecipeViewModel
+import com.wustlcse438sp20.myrecipe.data.RecipeShownFormat
 import kotlinx.android.synthetic.main.fragment_recipe.*
 
 
@@ -29,7 +32,7 @@ import kotlinx.android.synthetic.main.fragment_recipe.*
  */
 class RecipeFragment : Fragment() {
 
-    private var recipeList: ArrayList<RecipeByIngredients> = ArrayList()
+    private var recipeList: ArrayList<RecipeShownFormat> = ArrayList()
     lateinit var recyclerView: RecyclerView
     lateinit var adapter: RecipeAdapter
     lateinit var recipeviewModel:RecipeViewModel
@@ -57,7 +60,15 @@ class RecipeFragment : Fragment() {
         adapter = RecipeAdapter(context,recipeList)
         recyclerView.layoutManager = GridLayoutManager(context,2)
         recyclerView.adapter = adapter
-
+        adapter.setOnItemClick(object :RecipeAdapter.OnItemClickListener{
+            override fun OnItemClick(view: View, position: Int) {
+                val intent  =Intent(context,RecipeInformationActivity::class.java)
+                var bundle = Bundle()
+                bundle.putInt("recipeId",recipeList[position].id)
+                intent.putExtras(bundle)
+                activity?.startActivity(intent)
+            }
+        })
         //viewmodel
         recipeviewModel = ViewModelProviders.of(this).get(RecipeViewModel::class.java)
         //Get random recipe
@@ -65,11 +76,24 @@ class RecipeFragment : Fragment() {
         //data oberserve
         recipeviewModel.recipeList.observe(this, Observer{
             recipeList.clear()
-            recipeList.addAll(it)
+            for (i in it){
+                val recipeShownFormat = RecipeShownFormat(i.id,i.title,i.image)
+                recipeList.add(recipeShownFormat)
+            }
             adapter.notifyDataSetChanged()
         })
-        recipeviewModel.recipeInformation.observe(this, Observer {
-          Log.v("random",it.recipes[0].sourceUrl+"")
+        //Random data obeserve
+        recipeviewModel.recipeRandom.observe(this, Observer {
+            recipeList.clear()
+            for(i in it.recipes){
+                val recipeShownFormat:RecipeShownFormat
+                if (i.image ==null)
+                    recipeShownFormat = RecipeShownFormat(i.id,i.title,"")
+                else
+                    recipeShownFormat = RecipeShownFormat(i.id,i.title,i.image)
+                recipeList.add(recipeShownFormat)
+            }
+            adapter.notifyDataSetChanged()
         })
         //searchView
         recipe_search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -83,7 +107,6 @@ class RecipeFragment : Fragment() {
                 return false
             }
         })
-
     }
 
 }

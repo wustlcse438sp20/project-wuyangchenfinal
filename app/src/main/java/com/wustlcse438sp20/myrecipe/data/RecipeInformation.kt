@@ -29,7 +29,8 @@ data class RecipeInformation (
     val title: String,
     val readyInMinutes:Int,
     val servings:Int,
-    val image:String,
+    //According to tests, image may be null
+    val image:String?,
     val imageType:String,
     val summary:String,
     val cuisines:List<String>,
@@ -48,7 +49,7 @@ data class recipesLoad(
 data class winePairing(
     val pairedWines:List<String>,
     val pairingText:String,
-    val productMatches:productMatches
+    val productMatches:List<productMatches>
 )
 
 data class productMatches(

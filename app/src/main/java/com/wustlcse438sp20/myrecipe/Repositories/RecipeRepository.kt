@@ -35,7 +35,24 @@ class RecipeRepository {
 
     fun searchRecipeByRandom(resBody:MutableLiveData<recipesLoad>){
         CoroutineScope(Dispatchers.IO).launch {
-            val response = service.searchRecipeByRandom(2,apiKey)
+            val response = service.searchRecipeByRandom(12,apiKey)
+            withContext(Dispatchers.Main){
+                try {
+                    if (response.isSuccessful){
+                        Log.v("aaaa","跑到这里")
+                        resBody.value=response.body()
+                    }
+                }catch (e: HttpException){
+                    println("http error")
+                }
+
+            }
+        }
+    }
+
+    fun searchRecipeInformation(resBody:MutableLiveData<RecipeInformation>,recipeId:Int){
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = service.searchRecipeInformation(recipeId,apiKey)
             withContext(Dispatchers.Main){
                 try {
                     if (response.isSuccessful){

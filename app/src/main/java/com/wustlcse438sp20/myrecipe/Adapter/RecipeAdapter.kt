@@ -8,9 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.wustlcse438sp20.myrecipe.R
 import com.wustlcse438sp20.myrecipe.data.RecipeByIngredients
+import com.wustlcse438sp20.myrecipe.data.RecipeShownFormat
 import kotlinx.android.synthetic.main.item_recipe.view.*
 
-class RecipeAdapter (private var context: Context?, private var RecipeList: ArrayList<RecipeByIngredients>):
+class RecipeAdapter (private var context: Context?, private var RecipeList: ArrayList<RecipeShownFormat>):
 
     RecyclerView.Adapter<RecipeAdapter.ViewHolder>() {
 
@@ -36,7 +37,8 @@ class RecipeAdapter (private var context: Context?, private var RecipeList: Arra
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.itemView.recipe_title.text= RecipeList[position].title
-        Picasso.get().load(RecipeList[position].image).into(holder.itemView.recipe_image)
+        if (!RecipeList[position].image.equals(""))
+            Picasso.get().load(RecipeList[position].image).into(holder.itemView.recipe_image)
         if (onItemClickListener != null){
             holder.itemView.setOnClickListener{
                 onItemClickListener!!.OnItemClick(holder.itemView, position)
