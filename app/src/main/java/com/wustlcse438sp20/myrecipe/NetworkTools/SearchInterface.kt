@@ -2,6 +2,7 @@ package com.wustlcse438sp20.myrecipe.NetworkTools
 
 import com.wustlcse438sp20.myrecipe.data.RecipeByIngredients
 import com.wustlcse438sp20.myrecipe.data.RecipeInformation
+import com.wustlcse438sp20.myrecipe.data.SimilarRecipe
 import com.wustlcse438sp20.myrecipe.data.recipesLoad
 import retrofit2.Response
 import retrofit2.http.GET
@@ -17,6 +18,9 @@ interface SearchInterface {
 
     @GET("{recipeId}/information")
     suspend fun  searchRecipeInformation(@Path("recipeId") recipeId:Int,@Query("apiKey") apiKey: String):Response<RecipeInformation>
+
+    @GET("{recipeId}/similar")
+    suspend fun  searchSimilarRecipes(@Path("recipeId") recipeId:Int,@Query("apiKey") apiKey: String):Response<List<SimilarRecipe>>
 
 
 }

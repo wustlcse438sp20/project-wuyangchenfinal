@@ -9,4 +9,5 @@
     <string name="Ingredients">Ingredients</string>
     <string name="AddToCollection">Add To Collection</string>
     <string name="AddToMealplan">Add To MealPlan</string>
+    <string name="SimilarRecipe">Similar Recipes</string>
 </resources>

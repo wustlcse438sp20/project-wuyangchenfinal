@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.wustlcse438sp20.myrecipe.data.RecipeByIngredients
 import com.wustlcse438sp20.myrecipe.NetworkTools.ApiClient
 import com.wustlcse438sp20.myrecipe.data.RecipeInformation
+import com.wustlcse438sp20.myrecipe.data.SimilarRecipe
 import com.wustlcse438sp20.myrecipe.data.recipesLoad
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -53,6 +54,24 @@ class RecipeRepository {
     fun searchRecipeInformation(resBody:MutableLiveData<RecipeInformation>,recipeId:Int){
         CoroutineScope(Dispatchers.IO).launch {
             val response = service.searchRecipeInformation(recipeId,apiKey)
+            withContext(Dispatchers.Main){
+                try {
+                    if (response.isSuccessful){
+                        Log.v("aaaa","跑到这里")
+                        resBody.value=response.body()
+                    }
+                }catch (e: HttpException){
+                    println("http error")
+                }
+
+            }
+        }
+    }
+
+
+    fun searchSimilarRecipes(resBody:MutableLiveData<List<SimilarRecipe>>,recipeId:Int){
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = service.searchSimilarRecipes(recipeId,apiKey)
             withContext(Dispatchers.Main){
                 try {
                     if (response.isSuccessful){

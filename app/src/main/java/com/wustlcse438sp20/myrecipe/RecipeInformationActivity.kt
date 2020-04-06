@@ -2,10 +2,12 @@ package com.wustlcse438sp20.myrecipe
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.squareup.picasso.Picasso
 import com.wustlcse438sp20.myrecipe.ViewModels.RecipeViewModel
+import com.wustlcse438sp20.myrecipe.data.SimilarRecipe
 import kotlinx.android.synthetic.main.activity_recipe_information.*
 
 class RecipeInformationActivity : AppCompatActivity() {
@@ -27,6 +29,23 @@ class RecipeInformationActivity : AppCompatActivity() {
             textView_likes.text = it.aggregateLikes.toString()+" likes"
             textView_readyTime.text = it.readyInMinutes.toString()+" Mins"
             instruction_text.setText( it.instructions)
+
+        })
+        recipeviewModel.searchSimilarRecipes(recipeId)
+        recipeviewModel.similarRecipes.observe(this, Observer { similarRecipes ->
+            textView_similar.text = similarRecipes.joinToString(separator = ", ",
+                prefix = "",
+                postfix = "",
+                limit = 3,
+                truncated = "there’s more ..."){it -> "${it.title}"}
+//            for(recipeS in similarRecipes){
+//                Log.v("id",recipeS.id.toString())
+//                Log.v("title",recipeS.image)
+//                Log.v("image",recipeS.image)
+//                Log.v("imageUrls",recipeS.imageUrls.toString())
+//                Log.v("readyInMinutes",recipeS.readyInMinutes.toString())
+//                Log.v("servings",recipeS.servings.toString())
+//            }
 
         })
     }
