@@ -10,4 +10,22 @@
     <string name="AddToCollection">Add To Collection</string>
     <string name="AddToMealplan">Add To MealPlan</string>
     <string name="SimilarRecipe">Similar Recipes</string>
+    <string name="user_name">Username</string>
+    <string name="height">Height</string>
+    <string name="weight">Weight</string>
+    <string name="goal">Goal</string>
+    <string name="collection_title">Collections</string>
+    <string name="add_collection">Add</string>
+    <string name="edit_username">User Name</string>
+    <string name="edit_height">Height</string>
+    <string name="edit_weight">Weight</string>
+    <string name="edit_button">Edit</string>
+    <string name="save_button">Save</string>
+    <string name="delete_button">Delete</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="return_button">Return</string>
+    <string name="edit_collection_name">Collection Name</string>
+    <string name="edit_collection_description">Collection Description</string>
+    <string name="collection_name">Collection Name</string>
+    <string name="recipe_note">User notes for the recipe</string>
 </resources>

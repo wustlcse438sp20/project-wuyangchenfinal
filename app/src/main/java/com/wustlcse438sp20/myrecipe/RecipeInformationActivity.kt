@@ -3,6 +3,7 @@ package com.wustlcse438sp20.myrecipe
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.squareup.picasso.Picasso
@@ -19,8 +20,10 @@ class RecipeInformationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_recipe_information)
         val bundle = intent.extras
         val recipeId = bundle!!.getInt("recipeId")
+
         //viewmodel
         recipeviewModel = ViewModelProviders.of(this).get(RecipeViewModel::class.java)
+        // recipe details
         recipeviewModel.searchRecipeInformation(recipeId)
         recipeviewModel.recipeDetail.observe(this, Observer {
             if (it.image !== null)
@@ -31,6 +34,7 @@ class RecipeInformationActivity : AppCompatActivity() {
             instruction_text.setText( it.instructions)
 
         })
+        // similar recipes
         recipeviewModel.searchSimilarRecipes(recipeId)
         recipeviewModel.similarRecipes.observe(this, Observer { similarRecipes ->
             textView_similar.text = similarRecipes.joinToString(separator = ", ",
