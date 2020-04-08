@@ -3,7 +3,8 @@
 xmlns:app="http://schemas.android.com/apk/res-auto"
 android:layout_width="match_parent"
 android:layout_height="wrap_content"
-android:orientation="vertical">
+android:orientation="vertical"
+android:descendantFocusability="blocksDescendants" >
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -35,7 +36,7 @@ android:orientation="vertical">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/edit_collection_description"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

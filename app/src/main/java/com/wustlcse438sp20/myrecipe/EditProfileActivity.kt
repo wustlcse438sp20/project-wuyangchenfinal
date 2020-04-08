@@ -27,10 +27,19 @@ class EditProfileActivity : AppCompatActivity() {
             spinner.adapter = adapter
         }
 
+        save_profile_button.setOnClickListener(){
+            finish()
+        }
+
         cancel_profile_button.setOnClickListener(){
             finish()
         }
 
+    }
+
+    override fun onStart(){
+        super.onStart()
+        edit_user_image.setImageResource(R.drawable.profile_image)
     }
 
 }

@@ -28,4 +28,6 @@
     <string name="edit_collection_description">Collection Description</string>
     <string name="collection_name">Collection Name</string>
     <string name="recipe_note">User notes for the recipe</string>
+    <string name="IngredientTitle">Title</string>
+    <string name="IngredientUnit">Unit</string>
 </resources>

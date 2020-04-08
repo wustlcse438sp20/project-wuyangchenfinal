@@ -4,5 +4,5 @@ data class Collection (
     val id:Int,
     val name:String,
     val description:String,
-    val recipes:List<RecipeInformation>
+    val recipes:List<RecipeShownFormat>
 )

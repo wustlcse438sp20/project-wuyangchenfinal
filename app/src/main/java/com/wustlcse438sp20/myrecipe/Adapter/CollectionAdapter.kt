@@ -1,6 +1,7 @@
 package com.wustlcse438sp20.myrecipe.Adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ class CollectionAdapter (private var context: Context?, private var CollectionLi
     }
     var onItemClickListener: OnItemClickListener?=null
     fun setOnItemClick(onItemClickListener: OnItemClickListener){
+        Log.v("Click on Collection","item click")
         this.onItemClickListener=onItemClickListener
     }
 
@@ -35,7 +37,7 @@ class CollectionAdapter (private var context: Context?, private var CollectionLi
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.itemView.item_collection_name.text= CollectionList[position].name
-        holder.itemView.item_collection_name.text= CollectionList[position].description
+        holder.itemView.item_collection_description.text= CollectionList[position].description
     }
 
 }
