@@ -38,6 +38,11 @@ class CollectionAdapter (private var context: Context?, private var CollectionLi
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.itemView.item_collection_name.text= CollectionList[position].name
         holder.itemView.item_collection_description.text= CollectionList[position].description
+        if (onItemClickListener != null){
+            holder.itemView.setOnClickListener{
+                onItemClickListener!!.OnItemClick(holder.itemView, position)
+            }
+        }
     }
 
 }

@@ -42,12 +42,12 @@ class DisplayCollectionActivity : AppCompatActivity() {
 
         //create some data
         collectionList.clear()
-        var recipeList: ArrayList<RecipeShownFormat> = ArrayList()
-        recipeList.add(RecipeShownFormat(633508,"Baked Cheese Manicotti","Baked-Cheese-Manicotti-633508.jpg"))
-        collectionList.add(Collection(1,"American Food","this collection contains American food",recipeList))
-        recipeList.clear()
-        recipeList.add(RecipeShownFormat(716429,"Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs","https://spoonacular.com/recipeImages/716429-556x370.jpg"))
-        collectionList.add(Collection(2,"Foreign Food","this collection contains Foreign food",recipeList))
+        var temp_recipeList1: ArrayList<RecipeShownFormat> = ArrayList()
+        temp_recipeList1.add(RecipeShownFormat(633508,"Baked Cheese Manicotti","Baked-Cheese-Manicotti-633508.jpg"))
+        collectionList.add(Collection(1,"American Food","this collection contains American food",temp_recipeList1))
+        var temp_recipeList2: ArrayList<RecipeShownFormat> = ArrayList()
+        temp_recipeList2.add(RecipeShownFormat(716429,"Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs","https://spoonacular.com/recipeImages/716429-556x370.jpg"))
+        collectionList.add(Collection(2,"Foreign Food","this collection contains Foreign food",temp_recipeList2))
 
         //RecyclerView Adapter
         recyclerView = recipe_in_collection_recyclerview
@@ -66,7 +66,11 @@ class DisplayCollectionActivity : AppCompatActivity() {
         })
 
         // get collection from collectionId
+        Log.v("get collectionId",collectionId.toString())
         collectionList.filter { it.id == collectionId }.forEach {
+            Log.v("filter collectionId",it.id.toString())
+            Log.v("recipes",it.recipes.toString())
+            Log.v("collection for id=1",it.toString())
             recipeList.addAll(it.recipes)
             display_collection_name.text = it.name
         }

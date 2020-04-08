@@ -53,12 +53,12 @@ class ProfileFragment : Fragment() {
 
         //create some data
         collectionList.clear()
-        var recipeList: ArrayList<RecipeShownFormat> = ArrayList()
-        recipeList.add(RecipeShownFormat(633508,"Baked Cheese Manicotti","Baked-Cheese-Manicotti-633508.jpg"))
-        collectionList.add(Collection(1,"American Food","this collection contains American food",recipeList))
-        recipeList.clear()
-        recipeList.add(RecipeShownFormat(716429,"Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs","https://spoonacular.com/recipeImages/716429-556x370.jpg"))
-        collectionList.add(Collection(2,"Foreign Food","this collection contains Foreign food",recipeList))
+        var temp_recipeList1: ArrayList<RecipeShownFormat> = ArrayList()
+        temp_recipeList1.add(RecipeShownFormat(633508,"Baked Cheese Manicotti","Baked-Cheese-Manicotti-633508.jpg"))
+        collectionList.add(Collection(1,"American Food","this collection contains American food",temp_recipeList1))
+        var temp_recipeList2: ArrayList<RecipeShownFormat> = ArrayList()
+        temp_recipeList2.add(RecipeShownFormat(716429,"Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs","https://spoonacular.com/recipeImages/716429-556x370.jpg"))
+        collectionList.add(Collection(2,"Foreign Food","this collection contains Foreign food",temp_recipeList2))
 
         //RecyclerView Adapter
         recyclerView = profile_collection_recyclerview
@@ -70,7 +70,7 @@ class ProfileFragment : Fragment() {
                 Log.v("Click on Collection",position.toString())
                 val intent = Intent(context, DisplayCollectionActivity::class.java)
                 var bundle = Bundle()
-                bundle.putInt("collectionItem",collectionList[position].id)
+                bundle.putInt("collectionId",collectionList[position].id)
                 intent.putExtras(bundle)
                 activity?.startActivity(intent)
             }
