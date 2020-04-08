@@ -10,4 +10,6 @@
     <string name="AddToCollection">Add To Collection</string>
     <string name="AddToMealplan">Add To MealPlan</string>
     <string name="SimilarRecipe">Similar Recipes</string>
+    <string name="IngredientTitle">Title</string>
+    <string name="IngredientUnit">Unit</string>
 </resources>

@@ -145,23 +145,21 @@
                 app:layout_constraintEnd_toStartOf="@+id/add_to_mealplan"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <LinearLayout
-                android:id="@+id/ingredient_layout"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ingredient_recyclerview"
                 android:layout_width="409dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginBottom="32dp"
                 android:orientation="horizontal"
-                app:layout_constraintBottom_toTopOf="@+id/textView_similar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ingredient_title">
 
-            </LinearLayout>
+            </androidx.recyclerview.widget.RecyclerView>
 
             <TextView
                 android:id="@+id/similar_title"
@@ -171,7 +169,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:textSize="24sp"
-                app:layout_constraintTop_toBottomOf="@+id/ingredient_layout"
+                app:layout_constraintTop_toBottomOf="@+id/ingredient_recyclerview"
                 app:layout_constraintBottom_toTopOf="@+id/textView_similar"
                 android:text="@string/SimilarRecipe"
                 tools:layout_editor_absoluteX="1dp"
