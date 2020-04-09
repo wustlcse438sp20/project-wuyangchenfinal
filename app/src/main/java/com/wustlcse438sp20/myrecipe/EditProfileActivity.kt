@@ -39,7 +39,7 @@ class EditProfileActivity : AppCompatActivity() {
 
     override fun onStart(){
         super.onStart()
-        edit_user_image.setImageResource(R.drawable.profile_image)
+        edit_user_image.setImageResource(R.drawable.no_image_found)
     }
 
 }

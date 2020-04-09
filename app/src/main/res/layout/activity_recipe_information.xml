@@ -88,8 +88,8 @@
 
             <TextView
                 android:id="@+id/instruction_title"
-                android:layout_width="119dp"
-                android:layout_height="28dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="10dp"
@@ -104,8 +104,8 @@
 
             <TextView
                 android:id="@+id/ingredient_title"
-                android:layout_width="119dp"
-                android:layout_height="28dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="10dp"
@@ -118,7 +118,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/instruction_text" />
 
-            <EditText
+            <TextView
                 android:id="@+id/instruction_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -127,7 +127,6 @@
                 android:layout_marginRight="16dp"
                 android:ems="10"
                 android:gravity="start|top"
-                android:inputType="textMultiLine"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/instruction_title" />
@@ -217,7 +216,7 @@
                         android:layout_height="45dp"
                         android:scaleType="fitCenter"
                         app:layout_constraintLeft_toRightOf="@+id/recipe_user_image"
-                        app:srcCompat="@drawable/camera" />
+                        app:srcCompat="@drawable/no_image_found" />
                 </LinearLayout>
             </LinearLayout>
 

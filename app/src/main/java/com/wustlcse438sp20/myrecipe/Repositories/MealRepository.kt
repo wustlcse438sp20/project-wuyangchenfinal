@@ -40,12 +40,12 @@ class MealRepository {
     }
 
     fun saveExample() {
-        val item = hashMapOf(
+        val item:MutableMap<String,Any> = hashMapOf(
             "image" to "Peanut-Butter-And-Chocolate-Oatmeal-655219.jpg",
             "name" to "food",
             "title" to "Peanut Butter And Chocolate Oatmeal"
         )
-        val docData = hashMapOf(
+        val docData:MutableMap<String,Any> = hashMapOf(
             "date" to "Mar 20,2013",
             "list" to arrayListOf(item, item, item)
         )

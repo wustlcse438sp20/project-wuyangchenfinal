@@ -43,7 +43,7 @@ class DisplayCollectionActivity : AppCompatActivity() {
         //create some data
         collectionList.clear()
         var temp_recipeList1: ArrayList<RecipeShownFormat> = ArrayList()
-        temp_recipeList1.add(RecipeShownFormat(633508,"Baked Cheese Manicotti","Baked-Cheese-Manicotti-633508.jpg"))
+        temp_recipeList1.add(RecipeShownFormat(633508,"Baked Cheese Manicotti","https://spoonacular.com/recipeImages/Baked-Cheese-Manicotti-633508.jpg"))
         collectionList.add(Collection(1,"American Food","this collection contains American food",temp_recipeList1))
         var temp_recipeList2: ArrayList<RecipeShownFormat> = ArrayList()
         temp_recipeList2.add(RecipeShownFormat(716429,"Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs","https://spoonacular.com/recipeImages/716429-556x370.jpg"))
@@ -71,6 +71,7 @@ class DisplayCollectionActivity : AppCompatActivity() {
             Log.v("filter collectionId",it.id.toString())
             Log.v("recipes",it.recipes.toString())
             Log.v("collection for id=1",it.toString())
+            recipeList.clear()
             recipeList.addAll(it.recipes)
             display_collection_name.text = it.name
         }
