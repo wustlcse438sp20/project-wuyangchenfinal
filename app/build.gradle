@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 
@@ -14,6 +13,7 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -22,7 +22,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    dataBinding.enabled true
 
 }
 
@@ -41,6 +40,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:19.1.0'
     implementation 'com.google.firebase:firebase-analytics:17.2.2'
     implementation 'com.google.firebase:firebase-core:17.0.0'
+    implementation 'com.google.firebase:firebase-firestore:21.2.1'
     implementation 'com.google.android.material:material:1.1.0'
     //api denpendencies
     //kotlinx coroutines
@@ -59,10 +59,7 @@ dependencies {
 
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
-
-    //Last Adapter
-    implementation 'com.github.nitrico.lastadapter:lastadapter:2.3.0'
-    kapt 'com.android.databinding:compiler:3.1.4'
-
+    //CalendarView
+    implementation 'com.github.kizitonwose:CalendarView:0.3.2'
 
 }
