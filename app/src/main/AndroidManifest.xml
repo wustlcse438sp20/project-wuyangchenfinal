@@ -13,8 +13,6 @@
         android:theme="@style/AppTheme">
         <activity android:name=".RecipeInformationActivity"></activity>
         <activity android:name=".AddCollectionActivity" />
-        <activity android:name=".SmartMealActivity" />
-        <activity android:name=".MealAnalysisActivity" />
         <activity android:name=".DisplayCollectionActivity" />
         <activity android:name=".EditProfileActivity" />
         <activity android:name=".MainPageActivity" />

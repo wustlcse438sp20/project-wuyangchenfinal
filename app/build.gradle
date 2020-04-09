@@ -64,5 +64,4 @@ dependencies {
     //CalendarView
     implementation 'com.github.kizitonwose:CalendarView:0.3.2'
 
-
 }
