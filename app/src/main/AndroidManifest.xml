@@ -16,6 +16,8 @@
         <activity android:name=".DisplayCollectionActivity" />
         <activity android:name=".EditProfileActivity" />
         <activity android:name=".MainPageActivity" />
+        <activity android:name=".SmartMealActivity"></activity>
+        <activity android:name=".MealAnalysisActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

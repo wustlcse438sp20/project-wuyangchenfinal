@@ -98,8 +98,6 @@ class RecipeFragment : Fragment() {
         //searchView
         recipe_search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
-                Toast.makeText(context, "Authentication failed.",
-                    Toast.LENGTH_LONG).show()
                 recipeviewModel.searchRecipeByIngredients("apple")
                 return false
             }

@@ -19,7 +19,7 @@
                 android:id="@+id/detail_image"
                 android:layout_width="wrap_content"
                 android:layout_height="128dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -30,7 +30,7 @@
                 android:id="@+id/textView_cost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="3dp"
                 android:text="TextView"
                 app:layout_constraintEnd_toStartOf="@+id/textView_likes"
                 app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +40,7 @@
                 android:id="@+id/textView_likes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="3dp"
                 android:text="TextView"
                 app:layout_constraintEnd_toStartOf="@+id/textView_readyTime"
                 app:layout_constraintStart_toEndOf="@+id/textView_cost"
@@ -50,7 +50,7 @@
                 android:id="@+id/textView_readyTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="3dp"
                 android:text="TextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView_likes"
@@ -60,7 +60,7 @@
                 android:id="@+id/image_cost"
                 android:layout_width="48dp"
                 android:layout_height="59dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toStartOf="@+id/image_likes"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/detail_image"
@@ -70,7 +70,7 @@
                 android:id="@+id/image_likes"
                 android:layout_width="48dp"
                 android:layout_height="59dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toStartOf="@+id/image_readyTime"
                 app:layout_constraintStart_toEndOf="@+id/image_cost"
                 app:layout_constraintTop_toBottomOf="@+id/detail_image"
@@ -80,7 +80,7 @@
                 android:id="@+id/image_readyTime"
                 android:layout_width="48dp"
                 android:layout_height="59dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/image_likes"
                 app:layout_constraintTop_toBottomOf="@+id/detail_image"
@@ -92,7 +92,7 @@
                 android:layout_height="28dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="276dp"
                 android:layout_marginRight="276dp"
                 android:text="@string/Instruction"
@@ -108,7 +108,7 @@
                 android:layout_height="28dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="276dp"
                 android:layout_marginRight="276dp"
                 android:text="@string/Ingredients"
@@ -122,10 +122,8 @@
                 android:id="@+id/instruction_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginTop="6dp"
                 android:layout_marginRight="16dp"
                 android:ems="10"
                 android:gravity="start|top"
@@ -134,61 +132,41 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/instruction_title" />
 
-            <Button
-                android:id="@+id/add_to_collection"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
-                android:layout_weight="1"
-                android:text="@string/AddToCollection"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/add_to_mealplan"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <LinearLayout
-                android:id="@+id/ingredient_layout"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ingredient_recyclerview"
                 android:layout_width="409dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginBottom="32dp"
                 android:orientation="horizontal"
-                app:layout_constraintBottom_toTopOf="@+id/textView_similar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ingredient_title">
-
-            </LinearLayout>
+            </androidx.recyclerview.widget.RecyclerView>
 
             <TextView
                 android:id="@+id/similar_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:textSize="24sp"
-                app:layout_constraintTop_toBottomOf="@+id/ingredient_layout"
-                app:layout_constraintBottom_toTopOf="@+id/textView_similar"
-                android:text="@string/SimilarRecipe"
-                tools:layout_editor_absoluteX="1dp"
-                tools:layout_editor_absoluteY="491dp" />
+                app:layout_constraintTop_toBottomOf="@+id/ingredient_recyclerview"
+                android:text="@string/SimilarRecipe" />
 
             <TextView
                 android:id="@+id/textView_similar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="6dp"
                 android:textSize="18sp"
                 app:layout_constraintTop_toBottomOf="@+id/similar_title"
-                app:layout_constraintBottom_toTopOf="@+id/add_to_collection"
-                android:text="TextView"
-                tools:layout_editor_absoluteX="1dp"
-                tools:layout_editor_absoluteY="491dp" />
                 android:text="@string/SimilarRecipe" />
 
             <LinearLayout
@@ -239,7 +217,7 @@
                         android:layout_height="45dp"
                         android:scaleType="fitCenter"
                         app:layout_constraintLeft_toRightOf="@+id/recipe_user_image"
-                        app:srcCompat="@drawable/no_image_found" />
+                        app:srcCompat="@drawable/camera" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -250,15 +228,22 @@
                 app:layout_constraintTop_toBottomOf="@+id/recipe_notes_layout"
                 android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/add_to_mealplan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
-                android:text="@string/AddToMealplan"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/add_to_collection" />
+                <Button
+                    android:id="@+id/add_to_collection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:layout_weight="1"
+                    android:text="@string/AddToCollection" />
+
+                <Button
+                    android:id="@+id/add_to_mealplan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:layout_weight="1"
+                    android:text="@string/AddToMealplan" />
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
