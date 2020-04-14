@@ -80,7 +80,7 @@ class LoginFragment : Fragment() {
     fun updateUI(user: FirebaseUser?){
         val intent = Intent(context, MainPageActivity::class.java)
         val bundle = Bundle()
-        bundle.putString("username", user?.email)
+        bundle.putString("user_email", user?.email)
         intent.putExtras(bundle)
         activity?.startActivity(intent)
     }

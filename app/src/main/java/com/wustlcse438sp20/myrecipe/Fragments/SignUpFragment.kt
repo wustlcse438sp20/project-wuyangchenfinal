@@ -12,10 +12,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
 
 import com.wustlcse438sp20.myrecipe.R
+import com.wustlcse438sp20.myrecipe.data.UserProfile
+import com.wustlcse438sp20.myrecipe.data.Collection
 import kotlinx.android.synthetic.main.fragment_sign_up.*
+import java.util.HashMap
 
 
 /**
@@ -29,12 +38,20 @@ import kotlinx.android.synthetic.main.fragment_sign_up.*
 class SignUpFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var db : FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
         }
         auth = FirebaseAuth.getInstance()
+
+        // create an instance of the firebase database
+        db = FirebaseFirestore.getInstance()
+        val settings = FirebaseFirestoreSettings.Builder()
+            .setTimestampsInSnapshotsEnabled(true)
+            .build()
+        db.firestoreSettings = settings
     }
 
     override fun onCreateView(
@@ -74,7 +91,7 @@ class SignUpFragment : Fragment() {
                         })
                     builder?.create()?.show()
                     val user = auth.currentUser
-                    //updateUI(user)
+                    updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(ContentValues.TAG, "createUserWithEmail:failure", task.exception)
@@ -85,8 +102,38 @@ class SignUpFragment : Fragment() {
             }
     }
 
-    fun updateUI(){
+    fun updateUI(user: FirebaseUser?){
+        //create a new user
+        val user_profile = UserProfile(
+            user!!.email!!,
+            "",
+            "https://spoonacular.com/recipeImages/Baked-Cheese-Manicotti-633508.jpg",
+            0f,
+            0f,
+            "",
+            ArrayList<String>()
+        )
 
+        //store values for the database
+        val userMap: MutableMap<String, Any> = HashMap()
+        userMap["email"] = user_profile.email
+        userMap["username"] = user_profile.username
+        userMap["image"] = user_profile.image
+        userMap["height"] = user_profile.height
+        userMap["weight"] = user_profile.weight
+        userMap["goal"] = user_profile.goal
+        userMap["collections"] = user_profile.collections
+
+
+        // Add a new document with a generated ID
+        db.collection("userProfile")
+            .add(userMap)
+            .addOnSuccessListener(OnSuccessListener<DocumentReference> { documentReference ->
+                Toast.makeText(context,  "user profile created in the database!",Toast.LENGTH_LONG).show()
+            })
+            .addOnFailureListener(OnFailureListener { e ->
+                Toast.makeText(context, "Failed to create user in the database!", Toast.LENGTH_LONG)
+            })
     }
 
 }

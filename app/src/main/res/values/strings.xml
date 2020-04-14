@@ -25,6 +25,7 @@
     <string name="edit_weight">weight</string>
     <string name="IngredientUnit">Unit</string>
     <string name="user_name">username</string>
+    <string name="email">email</string>
     <string name="height">height</string>
     <string name="weight">weight</string>
     <string name="goal">goal</string>

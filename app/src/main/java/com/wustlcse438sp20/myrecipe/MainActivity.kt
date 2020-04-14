@@ -23,10 +23,11 @@ class MainActivity : AppCompatActivity() {
         fragmentAdapter = MyPagerAdapter(supportFragmentManager)
         viewPager.adapter=fragmentAdapter
         tab_main.setupWithViewPager(viewPager)
+        // identify login status
         val currentUser = auth.currentUser
         if (currentUser != null){
             val bundle = Bundle()
-            bundle.putString("username", currentUser?.email)
+            bundle.putString("user_email", currentUser?.email)
             val intent = Intent(this,MainPageActivity::class.java)
             intent.putExtras(bundle)
             startActivity(intent)
