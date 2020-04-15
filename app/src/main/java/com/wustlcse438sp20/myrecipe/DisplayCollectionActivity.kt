@@ -75,7 +75,7 @@ class DisplayCollectionActivity : AppCompatActivity() {
                     println("search success !!!!!!!!!!!!!!!!!!")
                     for (document in task.result!!) {
                         display_collection_name.text = document.get("name").toString()
-                            for(recipe in document.get("recipes") as List<RecipeShownFormat>){
+                            for(recipe in document.get("recipes") as ArrayList<RecipeShownFormat>){
                             recipeList.add(recipe)
                         }
                     }

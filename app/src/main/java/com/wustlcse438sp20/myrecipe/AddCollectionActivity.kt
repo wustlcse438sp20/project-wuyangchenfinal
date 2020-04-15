@@ -14,6 +14,11 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.wustlcse438sp20.myrecipe.data.Collection
 import com.wustlcse438sp20.myrecipe.data.RecipeShownFormat
 import kotlinx.android.synthetic.main.activity_add_collection.*
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
+
 
 class AddCollectionActivity : AppCompatActivity() {
 
@@ -51,11 +56,21 @@ class AddCollectionActivity : AppCompatActivity() {
                 ArrayList<RecipeShownFormat>()
             )
 
+
+//            for (model in mUserInitialPresenter.getUserInitialModel().getServicesOffered()) {
+//                val servicesOffered = HashMap()
+//                servicesOffered.put("serviceName", model.getServiceName())
+//                servicesOffered.put("price", model.getPrice())
+//                list.add(servicesOffered)
+//            }
+//            dataMap.put("servicesOffered", list)
+
             //store values for the database
+            val recipes:ArrayList<MutableMap<String,Any>> = ArrayList()
             val collectionMap: MutableMap<String, Any> = HashMap()
             collectionMap["name"] = collection.name
             collectionMap["description"] = collection.description
-            collectionMap["recipes"] = collection.recipes
+            collectionMap["recipes"] = recipes
 
 
             // Add a new collection to collections database with a generated documentID

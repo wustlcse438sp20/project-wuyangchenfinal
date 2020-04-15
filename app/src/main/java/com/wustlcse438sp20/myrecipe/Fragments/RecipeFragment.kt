@@ -36,11 +36,15 @@ class RecipeFragment : Fragment() {
     lateinit var recyclerView: RecyclerView
     lateinit var adapter: RecipeAdapter
     lateinit var recipeviewModel:RecipeViewModel
+    private var user_email:String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
         }
+
+        val activity_intent = activity!!.intent
+        user_email = activity_intent!!.extras!!.getString("user_email")!!
 
     }
 
@@ -65,6 +69,7 @@ class RecipeFragment : Fragment() {
                 val intent  =Intent(context,RecipeInformationActivity::class.java)
                 var bundle = Bundle()
                 bundle.putInt("recipeId",recipeList[position].id)
+                bundle.putString("user_email",user_email)
                 intent.putExtras(bundle)
                 activity?.startActivity(intent)
             }

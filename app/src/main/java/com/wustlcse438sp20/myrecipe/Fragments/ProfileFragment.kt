@@ -88,6 +88,7 @@ class ProfileFragment : Fragment() {
                                         Log.v("Search in database", "Sucess")
                                         println("search collection success !!!!!!!!!!!!!!!!!!")
                                         for (document in task.result!!) {
+                                            Log.v("!!!document recipes",document.get("recipes").toString())
                                             collectionList.add(Collection(collection_id, document.get("name").toString(), document.get("description").toString(), document.get("recipes") as ArrayList<RecipeShownFormat>))
                                         }
                                         adapter.notifyDataSetChanged()
