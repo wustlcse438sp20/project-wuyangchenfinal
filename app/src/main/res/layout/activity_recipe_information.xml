@@ -196,7 +196,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:hint="@string/recipe_note" />
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/recipe_images_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -206,9 +206,12 @@
 
                     <ImageView
                         android:id="@+id/recipe_user_image"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="128dp"
+                        app:layout_constraintEnd_toStartOf="@+id/recipe_add_image_button"
                         app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/no_image_found" />
 
                     <ImageButton
@@ -216,9 +219,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="45dp"
                         android:scaleType="fitCenter"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintLeft_toRightOf="@+id/recipe_user_image"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/camera" />
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
 
             <LinearLayout

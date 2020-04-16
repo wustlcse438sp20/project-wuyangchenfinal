@@ -1,7 +1,10 @@
 package com.wustlcse438sp20.myrecipe
 
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Html
@@ -29,6 +32,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.provider.MediaStore
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -136,7 +142,17 @@ class RecipeInformationActivity : AppCompatActivity() {
             .addOnFailureListener { exception ->
                 Log.w("TAG", "Error getting documents: ", exception)
             }
+        //take pic
+        recipe_add_image_button.setOnClickListener(){
+            val permission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
+            if(permission != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA),1)
+            }else{
+                val cIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                startActivityForResult(cIntent,1)
+            }
 
+        }
 
         //add to meal plan
         add_to_mealplan.setOnClickListener(){
@@ -254,6 +270,17 @@ class RecipeInformationActivity : AppCompatActivity() {
 
     fun AddToMealPlan(date:String){
         //数据库操作在这里写
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1){
+            if (resultCode == Activity.RESULT_OK){
+                val bitmap = data!!.extras!!["data"] as Bitmap
+                recipe_user_image.setImageBitmap(bitmap)
+                //存数据库
+            }
+        }
     }
 
 }
