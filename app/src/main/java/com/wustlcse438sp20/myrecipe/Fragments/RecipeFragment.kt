@@ -2,19 +2,18 @@ package com.wustlcse438sp20.myrecipe.Fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.wustlcse438sp20.myrecipe.Adapter.RecipeAdapter
-import com.wustlcse438sp20.myrecipe.data.RecipeByIngredients
+import com.wustlcse438sp20.myrecipe.Adapter.SimpleItemTouchHelperCallback
 import com.wustlcse438sp20.myrecipe.R
 import com.wustlcse438sp20.myrecipe.RecipeInformationActivity
 import com.wustlcse438sp20.myrecipe.ViewModels.RecipeViewModel
@@ -62,6 +61,10 @@ class RecipeFragment : Fragment() {
         //RecyclerView Adapter
         recyclerView = recyclerView_mainpage
         adapter = RecipeAdapter(context,recipeList)
+        //callback ItemTouch
+        val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(adapter)
+        val touchHelper = ItemTouchHelper(callback)
+        touchHelper.attachToRecyclerView(recyclerView)
         recyclerView.layoutManager = GridLayoutManager(context,2)
         recyclerView.adapter = adapter
         adapter.setOnItemClick(object :RecipeAdapter.OnItemClickListener{

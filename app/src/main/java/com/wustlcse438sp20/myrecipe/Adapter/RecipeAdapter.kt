@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.item_recipe.view.*
 
 class RecipeAdapter (private var context: Context?, private var RecipeList: ArrayList<RecipeShownFormat>):
 
-    RecyclerView.Adapter<RecipeAdapter.ViewHolder>() {
+    RecyclerView.Adapter<RecipeAdapter.ViewHolder>(),ItemTouchHelperAdapter {
 
     interface OnItemClickListener{
         fun OnItemClick(view: View, position: Int)
@@ -46,4 +46,10 @@ class RecipeAdapter (private var context: Context?, private var RecipeList: Arra
         }
     }
 
+    override fun onItemDissmiss(position: Int) {
+        RecipeList.removeAt(position)
+        notifyItemRemoved(position)
+        //do database operation: Delete
+
+    }
 }

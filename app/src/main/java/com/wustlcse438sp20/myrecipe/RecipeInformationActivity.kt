@@ -29,7 +29,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class RecipeInformationActivity : AppCompatActivity() {
@@ -136,9 +138,38 @@ class RecipeInformationActivity : AppCompatActivity() {
             }
 
 
+        //add to meal plan
+        add_to_mealplan.setOnClickListener(){
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+            builder.setTitle("Add to a collection")
+            var dates = arrayOfNulls<CharSequence>(5)
+            var selectedDates: ArrayList<CharSequence> = ArrayList()
+            val calenders = Calendar.getInstance()
+            for (i in 0..4){
+                dates[i] = calenders.get(Calendar.DAY_OF_MONTH).toString()
+                //这里面日期的格式，你自己调
+            }
+            builder.setMultiChoiceItems(dates, null,
+                DialogInterface.OnMultiChoiceClickListener { dialog, which, isChecked ->
+                    Log.v("choose collection", which.toString())
+                    dates[which]?.let { it1 -> selectedDates.add(it1) }
+                })
+            builder.setPositiveButton("YES",
+                DialogInterface.OnClickListener { dialog, which ->
+                    for (date in selectedDates){
+                        AddToMealPlan(date.toString())
+                    }
+                    Toast.makeText(this,"You have added track: " + recipe.title + " to mealplan" ,Toast.LENGTH_SHORT).show()
+                })
+            builder.setNegativeButton("NO",DialogInterface.OnClickListener({dialog,which ->
+            }))
+            val  dialog: AlertDialog= builder.create()
+            dialog.show()
+        }
+
+
+        //add to collection
         add_to_collection.setOnClickListener(){
-
-
             // 在数据库查询之前加载了
             Log.v("bbbb","跑到这里")
             // pop up alertdialog for user to choose from
@@ -219,6 +250,10 @@ class RecipeInformationActivity : AppCompatActivity() {
                 dialog.show()
             }
         }//listener
+    }
+
+    fun AddToMealPlan(date:String){
+        //数据库操作在这里写
     }
 
 }
