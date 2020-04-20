@@ -62,9 +62,9 @@ class RecipeFragment : Fragment() {
         recyclerView = recyclerView_mainpage
         adapter = RecipeAdapter(context,recipeList)
         //callback ItemTouch
-        val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(adapter)
-        val touchHelper = ItemTouchHelper(callback)
-        touchHelper.attachToRecyclerView(recyclerView)
+//        val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(adapter)
+//        val touchHelper = ItemTouchHelper(callback)
+//        touchHelper.attachToRecyclerView(recyclerView)
         recyclerView.layoutManager = GridLayoutManager(context,2)
         recyclerView.adapter = adapter
         adapter.setOnItemClick(object :RecipeAdapter.OnItemClickListener{
