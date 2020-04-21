@@ -50,8 +50,7 @@ class DisplayCollectionActivity : AppCompatActivity() {
             .setTimestampsInSnapshotsEnabled(true)
             .build()
         db.firestoreSettings = settings
-
-
+        showCollection()
         delete_collection_button.setOnClickListener(){
             db.collection("collections").document(collection_id)
                 .delete()
@@ -73,8 +72,12 @@ class DisplayCollectionActivity : AppCompatActivity() {
 
     }
 
+
     override fun onStart() {
         super.onStart()
+    }
+
+    fun showCollection(){
 
         val intent = intent
         val bundle = intent.extras
@@ -128,6 +131,7 @@ class DisplayCollectionActivity : AppCompatActivity() {
         val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(adapter,collection_id)
         val touchHelper = ItemTouchHelper(callback)
         touchHelper.attachToRecyclerView(recyclerView)
-
     }
+
+
 }

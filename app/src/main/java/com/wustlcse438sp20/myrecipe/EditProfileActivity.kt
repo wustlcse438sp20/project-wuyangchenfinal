@@ -99,8 +99,8 @@ class EditProfileActivity : AppCompatActivity() {
 
                         val updateMap: MutableMap<String, Any> = HashMap()
                         var username = edit_username.text.toString()
-                        var height = edit_height.text.toString().toInt()
-                        var weight = edit_weight.text.toString().toInt()
+                        var height = edit_height.text.toString().toFloat()
+                        var weight = edit_weight.text.toString().toFloat()
                         var goal = spinner.getSelectedItem().toString()
                         var image = user_email+"_profile.jpg"
                         //val bitmap:Bitmap = (edit_user_image.getDrawable() as BitmapDrawable).bitmap

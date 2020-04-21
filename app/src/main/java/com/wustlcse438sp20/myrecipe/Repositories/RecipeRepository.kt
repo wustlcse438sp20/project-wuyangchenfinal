@@ -16,7 +16,7 @@ import retrofit2.HttpException
 class RecipeRepository {
     val service=
         ApiClient.makeRetrofitService()
-    val apiKey ="28bb80cceac342b298452511c30c732f"
+    val apiKey ="d062cbb99dd64369a1a4958a4cf1c751"
     fun searchRecipeByIngredients(resBody:MutableLiveData<List<RecipeByIngredients>>, ingredients: String){
         CoroutineScope(Dispatchers.IO).launch {
             val response = service.searchRecipeByIngredients(ingredients,apiKey)
