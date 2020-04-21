@@ -6,7 +6,5 @@ data class UserProfile(
     var image: String,
     var height: Float,
     var weight: Float,
-    var goal: String,
-    // collection auto-generated ids
-    var collections: List<String>
+    var goal: String
 )

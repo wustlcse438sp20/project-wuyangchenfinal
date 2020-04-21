@@ -20,6 +20,7 @@ import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.yearMonth
 import com.wustlcse438sp20.myrecipe.MealAnalysisActivity
+import com.wustlcse438sp20.myrecipe.MyApplication
 
 import com.wustlcse438sp20.myrecipe.R
 import com.wustlcse438sp20.myrecipe.SmartMealActivity
@@ -42,8 +43,15 @@ import java.util.*
 class MealPlanFragment : Fragment() {
     private var selectedDate: LocalDate? = null
     private val today = LocalDate.now()
+    private var user_email = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Calling Application class (see application tag in AndroidManifest.xml)
+        var globalVariable = getActivity()?.getApplicationContext() as MyApplication
+        user_email = globalVariable.getEmail()!!
+
         arguments?.let {
 
         }

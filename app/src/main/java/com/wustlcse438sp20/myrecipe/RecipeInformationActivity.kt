@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Html
@@ -35,9 +36,13 @@ import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.provider.MediaStore
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
+import java.io.ByteArrayOutputStream
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+
 
 
 class RecipeInformationActivity : AppCompatActivity() {
@@ -50,14 +55,20 @@ class RecipeInformationActivity : AppCompatActivity() {
     private lateinit var collectionIds: List<String>
     private var collectionInfos: ArrayList<Collection> = ArrayList()
     private lateinit var db : FirebaseFirestore
+    private var recipe_id:Int = 0
+    private var user_email = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Calling Application class (see application tag in AndroidManifest.xml)
+        var globalVariable = applicationContext as MyApplication
+        user_email = globalVariable.getEmail()!!
         setContentView(R.layout.activity_recipe_information)
         val bundle = intent.extras
-        val recipeId = bundle!!.getInt("recipeId")
-        var user_email = bundle!!.getString("user_email")
-        Log.v("recipeId get",recipeId.toString())
+        recipe_id = bundle!!.getInt("recipeId")
+        //var user_email = bundle!!.getString("user_email")
+        Log.v("recipeId get",recipe_id.toString())
         //RecyclerView Adapter
         recyclerview = ingredient_recyclerview
         adapter = IngredientAdapter(this,IngredientList)
@@ -75,7 +86,7 @@ class RecipeInformationActivity : AppCompatActivity() {
         //viewmodel
         recipeviewModel = ViewModelProviders.of(this).get(RecipeViewModel::class.java)
         // recipe details
-        recipeviewModel.searchRecipeInformation(recipeId)
+        recipeviewModel.searchRecipeInformation(recipe_id)
         recipeviewModel.recipeDetail.observe(this, Observer {
             if (it.image !== null)
                 Picasso.get().load(it.image).into(detail_image)
@@ -90,7 +101,7 @@ class RecipeInformationActivity : AppCompatActivity() {
             adapter.notifyDataSetChanged()
         })
         // similar recipes
-        recipeviewModel.searchSimilarRecipes(recipeId)
+        recipeviewModel.searchSimilarRecipes(recipe_id)
         recipeviewModel.similarRecipes.observe(this, Observer { similarRecipes ->
             textView_similar.text = similarRecipes.joinToString(separator = ", ",
                 prefix = "",
@@ -109,39 +120,20 @@ class RecipeInformationActivity : AppCompatActivity() {
         })
 
         // search for all collections in userProfile database
-        db.collection("userProfile")
+        collectionInfos.clear()
+        db.collection("collections")
             .whereEqualTo("email", user_email)
             .get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
                     Log.d("TAG", "${document.id} => ${document.data}")
-                    collectionIds = document.get("collections") as ArrayList<String>
-                    collectionInfos.clear()
-                    Log.v("collectionIds",collectionIds.toString())
-                    for(collectionId in collectionIds){
-                        db.collection("collections")
-                            .whereEqualTo(FieldPath.documentId(), collectionId)
-                            .get()
-                            .addOnSuccessListener { documents ->
-                                for (document in documents) {
-                                    Log.d("TAG", "${document.id} => ${document.data}")
-                                    collectionInfos.add(Collection(collectionId,document.get("name").toString(),document.get("description").toString(),document.get("recipes") as ArrayList<RecipeShownFormat>))
-                                    Log.v("id",collectionId.toString())
-                                    Log.v("name",document.get("name").toString())
-                                    Log.v("description",document.get("description").toString())
-                                    Log.v("recipes",document.get("recipes").toString())
-                                    Log.v("collectionInfos",collectionInfos.toString())
-                                }
-                            }
-                            .addOnFailureListener { exception ->
-                                Log.w("TAG", "Error getting documents: ", exception)
-                            }
-                    }
+                    collectionInfos.add(Collection(id=document.id,email=document.get("email").toString(),name=document.get("name").toString(),description = document.get("description").toString(),recipes = document.get("recipes") as ArrayList<RecipeShownFormat>))
                 }
             }
             .addOnFailureListener { exception ->
                 Log.w("TAG", "Error getting documents: ", exception)
             }
+
         //take pic
         recipe_add_image_button.setOnClickListener(){
             val permission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
@@ -214,6 +206,7 @@ class RecipeInformationActivity : AppCompatActivity() {
                         for (selectedCollection in selectedCollections){
                             var collection_recipes: ArrayList<RecipeShownFormat> = ArrayList()
 
+                            // update recipe into collection(s)
                             db.collection("collections")
                                 .whereEqualTo(FieldPath.documentId(), selectedCollection.id)
                                 .get()
@@ -221,16 +214,12 @@ class RecipeInformationActivity : AppCompatActivity() {
                                     for (document in documents) {
                                         Log.d("TAG", "${document.id} => ${document.data}")
                                         var collection_recipes = document.get("recipes") as ArrayList<MutableMap<String,Any>>
-//                                        for(collection_recipe in document.get("recipes") as ArrayList<RecipeShownFormat>){
-//                                            collection_recipes.add(collection_recipe)
-//                                        }
                                         Log.v("recipes type",collection_recipes.toString())
                                         val new_recipe:MutableMap<String,Any> = HashMap()
                                         new_recipe["id"] = recipe.id
                                         new_recipe["title"] = recipe.title
                                         new_recipe["image"] = recipe.image!!
                                         collection_recipes.add(new_recipe)
-                                        //collection_recipes.add(RecipeShownFormat(recipe.id,recipe.title,recipe.image!!))
                                         Log.v("recipes type",collection_recipes.toString())
 
                                         //firebase database can only be updated by map
@@ -266,6 +255,29 @@ class RecipeInformationActivity : AppCompatActivity() {
                 dialog.show()
             }
         }//listener
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        // load user note image
+        loadNoteImage()
+    }
+
+    fun loadNoteImage(){
+        // load recipe note image from firebase storage
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference
+        storageRef.child(recipe_id.toString()+"_note.jpg").getBytes(Long.MAX_VALUE).addOnSuccessListener {
+            // Data for "images/user_email_profile.jpg" is returned, use this as needed
+            var bitmap:Bitmap = BitmapFactory.decodeByteArray(it, 0, it.size);
+            Log.v("成功加载 bitmap",bitmap.toString())
+            recipe_user_image.setImageBitmap(bitmap)
+        }.addOnFailureListener {
+            // Handle any errors
+            Log.v("加载失败 bitmap","")
+        }
     }
 
     fun AddToMealPlan(date:String){
@@ -277,8 +289,27 @@ class RecipeInformationActivity : AppCompatActivity() {
         if (requestCode == 1){
             if (resultCode == Activity.RESULT_OK){
                 val bitmap = data!!.extras!!["data"] as Bitmap
-                recipe_user_image.setImageBitmap(bitmap)
-                //存数据库
+                //recipe_user_image.setImageBitmap(bitmap)
+
+                // save to firebase storage
+                val storage: FirebaseStorage = FirebaseStorage.getInstance()
+                // Create a storage reference from our app
+                val storageRef = storage.getReferenceFromUrl("gs://final-project-cfa98.appspot.com")
+                // Create a reference to "user_email_profile.jpg"
+                val profileRef = storageRef.child(recipe_id.toString()+"_note.jpg")
+
+                var baos: ByteArrayOutputStream = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                var data = baos.toByteArray()
+                val uploadTask = profileRef.putBytes(data)
+                uploadTask
+                    .addOnFailureListener(OnFailureListener {
+                        // Handle unsuccessful uploads
+                    })
+                    .addOnSuccessListener(OnSuccessListener<UploadTask.TaskSnapshot> { taskSnapshot ->
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                        loadNoteImage()
+                    })
             }
         }
     }

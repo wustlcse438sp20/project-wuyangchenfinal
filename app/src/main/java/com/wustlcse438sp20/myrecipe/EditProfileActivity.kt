@@ -33,6 +33,7 @@ import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import java.io.ByteArrayOutputStream
 
 
+
 class EditProfileActivity : AppCompatActivity() {
 
     private var user_email: String = ""
@@ -41,10 +42,14 @@ class EditProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Calling Application class (see application tag in AndroidManifest.xml)
+        var globalVariable = applicationContext as MyApplication
+        user_email = globalVariable.getEmail()!!
         setContentView(R.layout.activity_edit_profile)
 
-        val bundle = intent.extras
-        user_email = bundle!!.getString("user_email")!!
+//        val bundle = intent.extras
+//        user_email = bundle!!.getString("user_email")!!
 
         // set an instance of firebase
         db = FirebaseFirestore.getInstance()
@@ -94,7 +99,7 @@ class EditProfileActivity : AppCompatActivity() {
                         var height = edit_height.text.toString().toInt()
                         var weight = edit_weight.text.toString().toInt()
                         var goal = spinner.getSelectedItem().toString()
-                        var image = "images/"+user_email+"_profile.jpg"
+                        var image = user_email+"_profile.jpg"
                         //val bitmap:Bitmap = (edit_user_image.getDrawable() as BitmapDrawable).bitmap
 
                         updateMap.put("image", image)
@@ -146,12 +151,9 @@ class EditProfileActivity : AppCompatActivity() {
                     if (document.get("image") !== null) {
                         val image_url = document.get("image").toString()
                         // load firebase storage image
-                        // Create a storage reference from our app
                         val storage = FirebaseStorage.getInstance()
                         val storageRef = storage.reference
-                        var profileRef = storageRef.child(image_url)
-                        val ONE_MEGABYTE: Long = 1024 * 1024
-                        profileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener {
+                        storageRef.child(user_email+"_profile.jpg").getBytes(Long.MAX_VALUE).addOnSuccessListener {
                             // Data for "images/user_email_profile.jpg" is returned, use this as needed
                             var bitmap:Bitmap = BitmapFactory.decodeByteArray(it, 0, it.size);
                             Log.v("成功加载 bitmap",bitmap.toString())
@@ -188,11 +190,6 @@ class EditProfileActivity : AppCompatActivity() {
                 val storageRef = storage.getReferenceFromUrl("gs://final-project-cfa98.appspot.com")
                 // Create a reference to "user_email_profile.jpg"
                 val profileRef = storageRef.child(user_email+"_profile.jpg")
-                // Create a reference to 'images/user_email_profile.jpg'
-                val profileImagesRef = storageRef.child("images/"+user_email+"_profile.jpg")
-                // While the file names are the same, the references point to different files
-                profileRef.name == profileImagesRef.name    // true
-                profileRef.path == profileImagesRef.path    // false
 
                 var baos:ByteArrayOutputStream = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)

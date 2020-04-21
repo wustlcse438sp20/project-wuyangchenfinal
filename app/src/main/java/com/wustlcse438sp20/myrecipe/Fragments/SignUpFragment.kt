@@ -113,8 +113,7 @@ class SignUpFragment : Fragment() {
             "https://spoonacular.com/recipeImages/Baked-Cheese-Manicotti-633508.jpg",
             0f,
             0f,
-            "",
-            ArrayList<String>()
+            ""
         )
 
         //val bmp: Bitmap = Bitmap.createBitmap(128, 128, Bitmap.Config.ARGB_8888)
@@ -126,8 +125,6 @@ class SignUpFragment : Fragment() {
         userMap["height"] = user_profile.height
         userMap["weight"] = user_profile.weight
         userMap["goal"] = user_profile.goal
-        userMap["collections"] = user_profile.collections
-
 
         // Add a new document with a generated ID
         db.collection("userProfile")

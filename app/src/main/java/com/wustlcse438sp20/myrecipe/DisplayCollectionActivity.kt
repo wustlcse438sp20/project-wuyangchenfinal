@@ -22,18 +22,23 @@ import com.wustlcse438sp20.myrecipe.data.Collection
 import com.wustlcse438sp20.myrecipe.data.RecipeShownFormat
 import kotlinx.android.synthetic.main.activity_display_collection.*
 
+
 class DisplayCollectionActivity : AppCompatActivity() {
 
     private var recipeList: ArrayList<RecipeShownFormat> = ArrayList()
     lateinit var recyclerView: RecyclerView
     lateinit var adapter: RecipeAdapter
-    //var user_email:String = ""
+    var user_email:String = ""
     var collection_id:String = ""
     private lateinit var db : FirebaseFirestore
     lateinit var recipeviewModel: RecipeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Calling Application class (see application tag in AndroidManifest.xml)
+        var globalVariable = applicationContext as MyApplication
+        user_email = globalVariable.getEmail()!!
         setContentView(R.layout.activity_display_collection)
         val bundle = intent.extras
         collection_id = bundle!!.getString("collectionId")!!
@@ -46,6 +51,22 @@ class DisplayCollectionActivity : AppCompatActivity() {
             .build()
         db.firestoreSettings = settings
 
+
+        delete_collection_button.setOnClickListener(){
+            db.collection("collections").document(collection_id)
+                .delete()
+                .addOnCompleteListener(OnCompleteListener<Void> { task ->
+                    if (task.isSuccessful) {
+                        Log.v("Delete from database", "Sucess")
+                        println("Delete collection success !!!!!!!!!!!!!!!!!!")
+                    }
+                    else {
+                        Log.v("Delete from database", "Fail")
+                        println("failed to delete collection")
+                    }
+                })
+            finish()
+        }
 
         display_collection_return_button.setOnClickListener(){
             finish()
@@ -60,7 +81,7 @@ class DisplayCollectionActivity : AppCompatActivity() {
         val bundle = intent.extras
         collection_id = bundle!!.getString("collectionId")!!
 
-
+        recipeList.clear()
         db.collection("collections")
             .whereEqualTo(FieldPath.documentId(), collection_id)
             .get()
