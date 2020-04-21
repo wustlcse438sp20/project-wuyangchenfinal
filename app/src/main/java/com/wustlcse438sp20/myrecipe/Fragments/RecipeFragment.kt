@@ -66,7 +66,7 @@ class RecipeFragment : Fragment() {
 
         //RecyclerView Adapter
         recyclerView = recyclerView_mainpage
-        adapter = RecipeAdapter(context,recipeList)
+        adapter = RecipeAdapter(context,recipeList,"")
         //callback ItemTouch
 //        val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(adapter)
 //        val touchHelper = ItemTouchHelper(callback)

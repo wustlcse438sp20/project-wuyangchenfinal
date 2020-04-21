@@ -10,5 +10,6 @@ import com.wustlcse438sp20.myrecipe.data.RecipeShownFormat
 
 interface ItemTouchHelperAdapter {
 
-   fun onItemDissmiss(position:Int)
+   fun onItemDissmiss(position:Int){
+   }
 }

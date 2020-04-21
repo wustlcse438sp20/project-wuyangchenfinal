@@ -108,10 +108,9 @@ class DisplayCollectionActivity : AppCompatActivity() {
                     println("failed to get user data")
                 }
             })
-
         //RecyclerView Adapter
         recyclerView = recipe_in_collection_recyclerview
-        adapter = RecipeAdapter(this,recipeList)
+        adapter = RecipeAdapter(this,recipeList,collection_id)
         recyclerView.layoutManager = GridLayoutManager(this,2)
         recyclerView.adapter = adapter
         adapter.setOnItemClick(object :RecipeAdapter.OnItemClickListener{
