@@ -1,6 +1,7 @@
 package com.wustlcse438sp20.myrecipe.ViewModels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.wustlcse438sp20.myrecipe.data.RecipeByIngredients
@@ -21,6 +22,7 @@ class RecipeViewModel (application: Application):AndroidViewModel(application){
     }
 
     fun searchRecipeByRandom(){
+        Log.v("跑了请求","1")
         recipeRepository.searchRecipeByRandom(recipeRandom)
     }
 
