@@ -56,6 +56,7 @@ class RecipeInformationActivity : AppCompatActivity() {
     private var collectionInfos: ArrayList<Collection> = ArrayList()
     private lateinit var db : FirebaseFirestore
     private var recipe_id:Int = 0
+    private var type:String = "search"
     private var user_email = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +68,10 @@ class RecipeInformationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_recipe_information)
         val bundle = intent.extras
         recipe_id = bundle!!.getInt("recipeId")
+        type = bundle!!.getString("type").toString()
+        if (type.equals("search")){
+            recipe_notes_layout.visibility = View.GONE
+        }
         //var user_email = bundle!!.getString("user_email")
         Log.v("recipeId get",recipe_id.toString())
         //RecyclerView Adapter

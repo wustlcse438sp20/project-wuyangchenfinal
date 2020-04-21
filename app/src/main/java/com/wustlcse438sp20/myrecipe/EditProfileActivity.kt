@@ -28,8 +28,11 @@ import com.google.android.gms.tasks.OnSuccessListener
 import androidx.annotation.NonNull
 import com.google.android.gms.tasks.OnFailureListener
 import android.R.attr.data
+import android.database.Cursor
 import android.graphics.BitmapFactory
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.net.Uri
+import android.widget.Toast
 import java.io.ByteArrayOutputStream
 
 
@@ -178,34 +181,33 @@ class EditProfileActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1){
-            if (resultCode == Activity.RESULT_OK){
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
                 val bitmap = data!!.extras!!["data"] as Bitmap
-                Log.v("照相机返回",bitmap.toString())
                 edit_user_image.setImageBitmap(bitmap)
-
                 // save to firebase storage
-                val storage:FirebaseStorage = FirebaseStorage.getInstance()
+                val storage: FirebaseStorage = FirebaseStorage.getInstance()
                 // Create a storage reference from our app
                 val storageRef = storage.getReferenceFromUrl("gs://final-project-cfa98.appspot.com")
                 // Create a reference to "user_email_profile.jpg"
-                val profileRef = storageRef.child(user_email+"_profile.jpg")
+                val profileRef = storageRef.child(user_email + "_profile.jpg")
 
-                var baos:ByteArrayOutputStream = ByteArrayOutputStream()
+                var baos: ByteArrayOutputStream = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
                 var data = baos.toByteArray()
                 val uploadTask = profileRef.putBytes(data)
                 uploadTask
                     .addOnFailureListener(OnFailureListener {
-                    // Handle unsuccessful uploads
+                        // Handle unsuccessful uploads
                     })
                     .addOnSuccessListener(OnSuccessListener<UploadTask.TaskSnapshot> { taskSnapshot ->
-                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                         val downloadUrl = taskSnapshot.getStorage().downloadUrl
-                        Log.v("download url",downloadUrl.toString())
+                        Log.v("download url", downloadUrl.toString())
                     })
-            }
-        }
+            }//resultcode
+        }//requestcode
     }
+
 
 }

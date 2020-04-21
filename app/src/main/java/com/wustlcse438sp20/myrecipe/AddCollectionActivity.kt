@@ -51,36 +51,41 @@ class AddCollectionActivity : AppCompatActivity() {
 
 
         save_collection_button.setOnClickListener(){
-            //create a new user
-            val collection = Collection(
-                "",
-                user_email,
-                edit_collection_name.text.toString(),
-                edit_description.text.toString(),
-                ArrayList<RecipeShownFormat>()
-            )
+            if (edit_collection_name.text.toString() !="" && edit_collection_name.text !=null && edit_description.text.toString()!=""&& edit_description.text!=null){
+                //create a new user
+                val collection = Collection(
+                    "",
+                    user_email,
+                    edit_collection_name.text.toString(),
+                    edit_description.text.toString(),
+                    ArrayList<RecipeShownFormat>()
+                )
 
-            //store values for the database
-            val recipes:ArrayList<MutableMap<String,Any>> = ArrayList()
-            val collectionMap: MutableMap<String, Any> = HashMap()
-            collectionMap["email"] = user_email
-            collectionMap["name"] = collection.name
-            collectionMap["description"] = collection.description
-            collectionMap["recipes"] = recipes
+                //store values for the database
+                val recipes:ArrayList<MutableMap<String,Any>> = ArrayList()
+                val collectionMap: MutableMap<String, Any> = HashMap()
+                collectionMap["email"] = user_email
+                collectionMap["name"] = collection.name
+                collectionMap["description"] = collection.description
+                collectionMap["recipes"] = recipes
 
 
-            // Add a new collection to collections database with a generated documentID
-            db.collection("collections")
-                .add(collectionMap)
-                .addOnSuccessListener(OnSuccessListener<DocumentReference> { documentReference ->
-                    Toast.makeText(this,  "collection created in the database!",Toast.LENGTH_LONG).show()
-                    //collection_id = documentReference.id
-                })
-                .addOnFailureListener(OnFailureListener { e ->
-                    Toast.makeText(this, "Failed to create collection in the database!", Toast.LENGTH_LONG)
-                })
+                // Add a new collection to collections database with a generated documentID
+                db.collection("collections")
+                    .add(collectionMap)
+                    .addOnSuccessListener(OnSuccessListener<DocumentReference> { documentReference ->
+                        Toast.makeText(this,  "collection created in the database!",Toast.LENGTH_LONG).show()
+                        //collection_id = documentReference.id
+                    })
+                    .addOnFailureListener(OnFailureListener { e ->
+                        Toast.makeText(this, "Failed to create collection in the database!", Toast.LENGTH_LONG)
+                    })
 
-            finish()
+                finish()
+            }else{
+                Toast.makeText(this,"Please Input the valid content",Toast.LENGTH_SHORT)
+            }
+
         }
 
         cancel_collection_button.setOnClickListener(){

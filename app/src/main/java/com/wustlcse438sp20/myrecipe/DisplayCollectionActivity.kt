@@ -67,7 +67,6 @@ class DisplayCollectionActivity : AppCompatActivity() {
                 })
             finish()
         }
-
         display_collection_return_button.setOnClickListener(){
             finish()
         }
@@ -118,6 +117,7 @@ class DisplayCollectionActivity : AppCompatActivity() {
                 val detail_intent = Intent(this@DisplayCollectionActivity, RecipeInformationActivity::class.java)
                 var bundle = Bundle()
                 bundle.putInt("recipeId", recipeList[position].id)
+                bundle.putString("type","collection")
                 Log.v("send recipeId to detail",recipeList[position].id.toString())
                 detail_intent.putExtras(bundle)
                 startActivity(detail_intent)

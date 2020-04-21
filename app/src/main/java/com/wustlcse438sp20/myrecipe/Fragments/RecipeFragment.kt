@@ -78,6 +78,7 @@ class RecipeFragment : Fragment() {
                 val intent  =Intent(context,RecipeInformationActivity::class.java)
                 var bundle = Bundle()
                 bundle.putInt("recipeId",recipeList[position].id)
+                bundle.putString("type","search")
                 //bundle.putString("user_email",user_email)
                 intent.putExtras(bundle)
                 activity?.startActivity(intent)
@@ -114,7 +115,7 @@ class RecipeFragment : Fragment() {
         //searchView
         recipe_search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
-                recipeviewModel.searchRecipeByIngredients("apple")
+                recipeviewModel.searchRecipeByIngredients(recipe_search.query.toString())
                 return false
             }
             override fun onQueryTextChange(s: String): Boolean {

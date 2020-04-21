@@ -24,7 +24,6 @@ tools:context=".AddCollectionActivity">
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     android:inputType="number"
-    android:digits="0123456789."
     android:hint="@string/edit_collection_description"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
