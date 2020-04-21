@@ -50,7 +50,6 @@ class RecipeInformationActivity : AppCompatActivity() {
     private lateinit var collectionIds: List<String>
     private var collectionInfos: ArrayList<Collection> = ArrayList()
     private lateinit var db : FirebaseFirestore
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe_information)
@@ -70,8 +69,6 @@ class RecipeInformationActivity : AppCompatActivity() {
             .setTimestampsInSnapshotsEnabled(true)
             .build()
         db.firestoreSettings = settings
-
-
         //viewmodel
         recipeviewModel = ViewModelProviders.of(this).get(RecipeViewModel::class.java)
         // recipe details

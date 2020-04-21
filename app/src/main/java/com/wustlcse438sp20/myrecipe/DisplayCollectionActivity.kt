@@ -87,7 +87,6 @@ class DisplayCollectionActivity : AppCompatActivity() {
                     println("failed to get user data")
                 }
             })
-
         //RecyclerView Adapter
         recyclerView = recipe_in_collection_recyclerview
         adapter = RecipeAdapter(this,recipeList)

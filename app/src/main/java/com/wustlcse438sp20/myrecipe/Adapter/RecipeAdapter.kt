@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.squareup.picasso.Picasso
 import com.wustlcse438sp20.myrecipe.R
 import com.wustlcse438sp20.myrecipe.data.RecipeByIngredients
@@ -15,6 +17,10 @@ class RecipeAdapter (private var context: Context?, private var RecipeList: Arra
 
     RecyclerView.Adapter<RecipeAdapter.ViewHolder>(),ItemTouchHelperAdapter {
 
+    val db : FirebaseFirestore =FirebaseFirestore.getInstance()
+    val settings = FirebaseFirestoreSettings.Builder()
+        .setTimestampsInSnapshotsEnabled(true)
+        .build()
     interface OnItemClickListener{
         fun OnItemClick(view: View, position: Int)
     }
@@ -47,6 +53,7 @@ class RecipeAdapter (private var context: Context?, private var RecipeList: Arra
     }
 
     override fun onItemDissmiss(position: Int) {
+        db.firestoreSettings = settings
         RecipeList.removeAt(position)
         notifyItemRemoved(position)
         //do database operation: Delete
