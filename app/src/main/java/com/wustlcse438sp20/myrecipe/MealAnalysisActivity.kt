@@ -9,10 +9,17 @@ import com.wustlcse438sp20.myrecipe.ViewModels.MealViewModel
 import com.wustlcse438sp20.myrecipe.data.Meal
 import kotlinx.android.synthetic.main.activity_meal_analysis_activity.*
 
+
 class MealAnalysisActivity : AppCompatActivity() {
     lateinit var mealViewModel: MealViewModel
+    var user_email = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Calling Application class (see application tag in AndroidManifest.xml)
+        var globalVariable = applicationContext as MyApplication
+        user_email = globalVariable.getEmail()!!
         setContentView(R.layout.activity_meal_analysis_activity)
         mealViewModel = ViewModelProviders.of(this).get(MealViewModel::class.java)
         val string = intent.getStringExtra("date")

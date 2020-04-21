@@ -10,10 +10,12 @@ import com.wustlcse438sp20.myrecipe.Fragments.ProfileFragment
 import com.wustlcse438sp20.myrecipe.Fragments.RecipeFragment
 import kotlinx.android.synthetic.main.activity_main_page.*
 
+
 class MainPageActivity : AppCompatActivity() {
     private lateinit var fragmentAdapter: MyPagerAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main_page)
         fragmentAdapter = MyPagerAdapter(supportFragmentManager)
         viewPager2.adapter=fragmentAdapter

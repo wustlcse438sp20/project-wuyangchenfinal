@@ -1,5 +1,6 @@
 package com.wustlcse438sp20.myrecipe.Fragments
 
+import android.app.Application
 import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
@@ -14,6 +15,8 @@ import com.google.firebase.auth.FirebaseUser
 
 import com.wustlcse438sp20.myrecipe.R
 import com.wustlcse438sp20.myrecipe.MainPageActivity
+import com.wustlcse438sp20.myrecipe.MyApplication
+
 import kotlinx.android.synthetic.main.fragment_login.*
 
 
@@ -28,9 +31,14 @@ import kotlinx.android.synthetic.main.fragment_login.*
 class LoginFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var globalVariable:MyApplication
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Calling Application class (see application tag in AndroidManifest.xml)
+        globalVariable = getActivity()?.getApplicationContext() as MyApplication
+
         arguments?.let {
         }
         auth = FirebaseAuth.getInstance()
@@ -78,10 +86,13 @@ class LoginFragment : Fragment() {
     }
 
     fun updateUI(user: FirebaseUser?){
+        //Set email in global/application context
+        globalVariable.setEmail(user?.email!!)
+        Log.v("从全局变量中得到邮件",globalVariable.getEmail())
         val intent = Intent(context, MainPageActivity::class.java)
-        val bundle = Bundle()
-        bundle.putString("user_email", user?.email)
-        intent.putExtras(bundle)
+//        val bundle = Bundle()
+//        bundle.putString("user_email", user?.email)
+//        intent.putExtras(bundle)
         activity?.startActivity(intent)
     }
 

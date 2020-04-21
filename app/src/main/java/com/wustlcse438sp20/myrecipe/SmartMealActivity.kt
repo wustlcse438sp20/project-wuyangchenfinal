@@ -12,8 +12,14 @@ import kotlinx.android.synthetic.main.activity_smart_meal.*
 
 class SmartMealActivity : AppCompatActivity() {
     lateinit var mealViewModel: MealViewModel
+    var user_email = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Calling Application class (see application tag in AndroidManifest.xml)
+        var globalVariable = applicationContext as MyApplication
+        user_email = globalVariable.getEmail()!!
         setContentView(R.layout.activity_smart_meal)
 
         mealViewModel = ViewModelProviders.of(this).get(MealViewModel::class.java)

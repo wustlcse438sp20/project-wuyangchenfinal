@@ -13,12 +13,12 @@ data class RecipeByIngredients (
     val likes:Int
 )
 
+
 data class RecipeShownFormat(
     val id: Int,
     val title: String,
     val image: String
 )
-
 
 
 
