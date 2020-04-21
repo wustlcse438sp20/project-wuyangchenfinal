@@ -35,18 +35,14 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter=fragmentAdapter
         tab_main.setupWithViewPager(viewPager)
         // identify login status
-        val currentUser = auth.currentUser
-        if (currentUser != null){
-
-            //Set email in global/application context
-            globalVariable.setEmail(currentUser?.email!!)
-            Log.v("从全局变量中得到邮件",globalVariable.getEmail())
-//            val bundle = Bundle()
-//            bundle.putString("user_email", currentUser?.email)
-            val intent = Intent(this,MainPageActivity::class.java)
-//            intent.putExtras(bundle)
-            startActivity(intent)
-        }
+//        val currentUser = auth.currentUser
+//        if (currentUser != null){
+//            //Set email in global/application context
+//            globalVariable.setEmail(currentUser?.email!!)
+//            Log.v("get from global var",globalVariable.getEmail())
+//            val intent = Intent(this,MainPageActivity::class.java)
+//            startActivity(intent)
+//        }
     }
 
     class MyPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {

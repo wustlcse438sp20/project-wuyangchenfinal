@@ -42,6 +42,7 @@ class EditProfileActivity : AppCompatActivity() {
     private var user_email: String = ""
     private lateinit var db: FirebaseFirestore
     private lateinit var array_adapter: ArrayAdapter<CharSequence>
+    private var imageFlag = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,50 +89,60 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
         save_profile_button.setOnClickListener(){
+            // update profile in database
+            if (edit_username.text.toString() !="" && edit_height.text.toString() !="" && edit_weight.text.toString()!="" && spinner.getSelectedItem().toString()!="Please select your goal:") {
+                db.collection("userProfile")
+                    .whereEqualTo("email", user_email)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            Log.d("TAG", "${document.id} => ${document.data}")
+                            Log.v("更新", "user profile")
 
-            db.collection("userProfile")
-                .whereEqualTo("email", user_email)
-                .get()
-                .addOnSuccessListener { documents ->
-                    for (document in documents) {
-                        Log.d("TAG", "${document.id} => ${document.data}")
-                        Log.v("更新","user profile")
-
-                        val updateMap: MutableMap<String, Any> = HashMap()
-                        var username = edit_username.text.toString()
-                        var height = edit_height.text.toString().toFloat()
-                        var weight = edit_weight.text.toString().toFloat()
-                        var goal = spinner.getSelectedItem().toString()
-                        var image = user_email+"_profile.jpg"
-                        //val bitmap:Bitmap = (edit_user_image.getDrawable() as BitmapDrawable).bitmap
-
-                        updateMap.put("image", image)
-                        updateMap.put("username", username)
-                        updateMap.put("height", height)
-                        updateMap.put("weight", weight)
-                        updateMap.put("goal", goal)
-
-                        document.reference
-                            .update(updateMap)
-                            .addOnSuccessListener {
-                                Log.d(
-                                    "Database Update",
-                                    "更新用户简介！！！"
-                                )
+                            val updateMap: MutableMap<String, Any> = HashMap()
+                            var username = edit_username.text.toString()
+                            var height = edit_height.text.toString().toFloat()
+                            Log.v("height:",edit_height.text.toString())
+                            var weight = edit_weight.text.toString().toFloat()
+                            Log.v("weight:",edit_weight.text.toString())
+                            var goal = spinner.getSelectedItem().toString()
+                            Log.v("spinner selected",spinner.getSelectedItem().toString())
+                            //val bitmap:Bitmap = (edit_user_image.getDrawable() as BitmapDrawable).bitmap
+                            if(imageFlag)
+                            {
+                                var image = user_email + "_profile.jpg"
+                                updateMap.put("image", image)
                             }
-                            .addOnFailureListener { e ->
-                                Log.w(
-                                    "Database Update",
-                                    "未能更新用户简介！！！",
-                                    e
-                                )
-                            }
+                            updateMap.put("username", username)
+                            updateMap.put("height", height)
+                            updateMap.put("weight", weight)
+                            updateMap.put("goal", goal)
+
+                            document.reference
+                                .update(updateMap)
+                                .addOnSuccessListener {
+                                    Log.d(
+                                        "Database Update",
+                                        "successfully update user profile"
+                                    )
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(
+                                        "Database Update",
+                                        "unable to update user profile!!!",
+                                        e
+                                    )
+                                }
+                        }
                     }
-                }
-                .addOnFailureListener { exception ->
-                    Log.w("TAG", "Error getting documents: ", exception)
-                }
-            finish()
+                    .addOnFailureListener { exception ->
+                        Log.w("TAG", "Error getting documents: ", exception)
+                    }
+                finish()
+            }
+            else{
+                Toast.makeText(this,"Please Input the valid content",Toast.LENGTH_SHORT).show()
+            }
         }
 
         cancel_profile_button.setOnClickListener(){
@@ -142,15 +153,17 @@ class EditProfileActivity : AppCompatActivity() {
 
     override fun onStart(){
         super.onStart()
+        // load every time is initially false
+        imageFlag = false
         //edit_user_image.setImageResource(R.drawable.no_image_found)
 
+        // load profile from database
         db.collection("userProfile")
             .whereEqualTo("email", user_email)
             .get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
                     Log.d("TAG", "${document.id} => ${document.data}")
-                    Log.v("更新","user profile")
                     if (document.get("image") !== null) {
                         val image_url = document.get("image").toString()
                         // load firebase storage image
@@ -159,11 +172,11 @@ class EditProfileActivity : AppCompatActivity() {
                         storageRef.child(user_email+"_profile.jpg").getBytes(Long.MAX_VALUE).addOnSuccessListener {
                             // Data for "images/user_email_profile.jpg" is returned, use this as needed
                             var bitmap:Bitmap = BitmapFactory.decodeByteArray(it, 0, it.size);
-                            Log.v("成功加载 bitmap",bitmap.toString())
+                            Log.v("success load bitmap",bitmap.toString())
                             edit_user_image.setImageBitmap(bitmap)
                         }.addOnFailureListener {
                             // Handle any errors
-                            Log.v("加载失败 bitmap","")
+                            Log.v("fail to load bitmap","")
                         }
                     }
                     edit_username.setText(document.get("username").toString())
@@ -204,6 +217,8 @@ class EditProfileActivity : AppCompatActivity() {
                         // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                         val downloadUrl = taskSnapshot.getStorage().downloadUrl
                         Log.v("download url", downloadUrl.toString())
+                        // after edit image
+                        imageFlag = true
                     })
             }//resultcode
         }//requestcode

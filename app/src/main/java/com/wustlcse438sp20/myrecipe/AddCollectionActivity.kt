@@ -83,7 +83,7 @@ class AddCollectionActivity : AppCompatActivity() {
 
                 finish()
             }else{
-                Toast.makeText(this,"Please Input the valid content",Toast.LENGTH_SHORT)
+                Toast.makeText(this,"Please Input the valid content",Toast.LENGTH_SHORT).show()
             }
 
         }
