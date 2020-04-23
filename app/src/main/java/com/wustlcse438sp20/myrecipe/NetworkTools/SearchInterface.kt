@@ -22,5 +22,7 @@ interface SearchInterface {
     @GET("{recipeId}/similar")
     suspend fun  searchSimilarRecipes(@Path("recipeId") recipeId:Int,@Query("apiKey") apiKey: String):Response<List<SimilarRecipe>>
 
+    @GET("{recipeId}/nutritionWidget.json")
+    suspend fun  getRecipeNutritionById(@Path("recipeId") recipeId:Int,@Query("apiKey") apiKey: String):Response<RecipeNutrition>
 
 }

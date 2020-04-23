@@ -20,6 +20,7 @@ import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.yearMonth
 import com.wustlcse438sp20.myrecipe.MealAnalysisActivity
+import com.wustlcse438sp20.myrecipe.MyApplication
 
 import com.wustlcse438sp20.myrecipe.R
 import com.wustlcse438sp20.myrecipe.SmartMealActivity
@@ -48,8 +49,8 @@ class MealPlanFragment : Fragment() {
         arguments?.let {
 
         }
-        val activity_intent = activity!!.intent
-        user_email = activity_intent!!.extras!!.getString("user_email")!!
+        var globalVariable = getActivity()?.getApplicationContext() as MyApplication
+        user_email = globalVariable.getEmail()!!
     }
 
     override fun onCreateView(

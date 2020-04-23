@@ -10,7 +10,7 @@ interface MealInterface {
 
     @GET("mealplanner/generate")
     suspend fun  mealplanner(@Query("timeFrame") timeFrame: String="day"
-                             ,@Query("targetCalories") targetCalories: Int = 2000
+                             ,@Query("targetCalories") targetCalories: Int = 1200
                             ,@Query("diet") diet: String=""
                             ,@Query("exclude") exclude: String=""
                             ,@Query("apiKey") apiKey: String):Response<MealSmart>

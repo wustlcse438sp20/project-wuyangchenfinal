@@ -12,8 +12,8 @@ class MealViewModel (application: Application):AndroidViewModel(application){
      var mealList:MutableLiveData<MealSmart> = MutableLiveData()
 
 
-    fun getMealplanner(){
-        mealRepository.mealplanner(mealList)
+    fun getMealplanner(targetCalories:Long){
+        mealRepository.mealplanner(mealList,targetCalories)
     }
     fun saveEx(){
         mealRepository.saveExample()

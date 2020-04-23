@@ -14,6 +14,7 @@ class RecipeViewModel (application: Application):AndroidViewModel(application){
     public var recipeRandom:MutableLiveData<recipesLoad> = MutableLiveData()
     public var recipeDetail:MutableLiveData<RecipeInformation> = MutableLiveData()
     public var similarRecipes:MutableLiveData<List<SimilarRecipe>> = MutableLiveData()
+    public var recipeNutrition:MutableLiveData<List<SimilarRecipe>> = MutableLiveData()
 
     fun searchRecipeByIngredients(ingredients:String){
         recipeRepository.searchRecipeByIngredients(recipeList,ingredients)
@@ -34,5 +35,9 @@ class RecipeViewModel (application: Application):AndroidViewModel(application){
 
     fun searchSimilarRecipes(recipeId:Int){
         recipeRepository.searchSimilarRecipes(similarRecipes,recipeId)
+    }
+
+    fun getRecipeNutritionById(recipeId:Int,result: (RecipeNutrition)->Unit){
+        recipeRepository.getRecipeNutritionById(recipeId,result)
     }
 }

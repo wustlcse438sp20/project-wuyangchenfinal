@@ -15,7 +15,7 @@ class RecipeRepository {
         ApiClient.makeRetrofitService()
     //    val apiKey ="3d97dfa37191404d8f9a8a2c2123820c"
    // val apiKey ="28bb80cceac342b298452511c30c732f"
-    val apiKey ="d062cbb99dd64369a1a4958a4cf1c751"
+    val apiKey ="3d97dfa37191404d8f9a8a2c2123820c"
     fun searchRecipeByIngredients(resBody:MutableLiveData<List<RecipeByIngredients>>, ingredients: String){
         CoroutineScope(Dispatchers.IO).launch {
             val response = service.searchRecipeByIngredients(ingredients,apiKey)
@@ -102,6 +102,23 @@ class RecipeRepository {
             }
         }
     }
+    fun getRecipeNutritionById(recipeId:Int,result: (RecipeNutrition)->Unit){
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = service.getRecipeNutritionById(recipeId,apiKey)
+            withContext(Dispatchers.Main){
+                try {
+                    if (response.isSuccessful){
+                        Log.v("aaaa","跑到这里")
+                        response.body()?.let {
+                            result(response.body()!!)
+                        }
+                    }
+                }catch (e: HttpException){
+                    println("http error")
+                }
 
+            }
+        }
+    }
 
 }

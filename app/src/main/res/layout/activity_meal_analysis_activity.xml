@@ -47,7 +47,15 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:textSize="16sp"
-                android:text="Calories:150"/>
+                />
+            <TextView
+                android:id="@+id/proteinSuggested"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:textSize="16sp"
+               />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -56,20 +64,28 @@
                 android:layout_marginTop="10dp"
                 android:text="Daily intake"/>
             <TextView
+                android:id="@+id/caloriesIntake"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:textSize="16sp"
+               />
+            <TextView
+                android:id="@+id/proteinintake"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:textSize="16sp"
+                />
+            <TextView
                 android:id="@+id/fatText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:textSize="16sp"
-                android:text="Fat:100"/>
-            <TextView
-                android:id="@+id/protein"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:paddingLeft="10dp"
-                android:textSize="16sp"
-                android:text="for protein:100"/>
+               />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

@@ -58,6 +58,7 @@ class RecipeInformationActivity : AppCompatActivity() {
     private var recipe_id:Int = 0
     private var type:String = "search"
     private var user_email = ""
+    private var selectDate = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -155,24 +156,23 @@ class RecipeInformationActivity : AppCompatActivity() {
         add_to_mealplan.setOnClickListener(){
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
             builder.setTitle("Add to a collection")
-            var dates = arrayOfNulls<CharSequence>(5)
+            var dates = arrayOfNulls<CharSequence>(7)
             var selectedDates: ArrayList<CharSequence> = ArrayList()
             val calenders = Calendar.getInstance()
-            for (i in 0..4){
-                dates[i] = calenders.get(Calendar.DAY_OF_MONTH).toString()
-                //这里面日期的格式，你自己调
+            calenders.add(Calendar.DAY_OF_MONTH, -1)
+            dates[0] =parseMonth(calenders.get(Calendar.MONTH)) + " " +calenders.get(Calendar.DAY_OF_MONTH)+ ","+calenders.get(Calendar.YEAR)
+            selectDate =dates[0].toString()
+            for (i in 1..6) {
+                calenders.add(Calendar.DAY_OF_MONTH, +1)
+                dates[i] =parseMonth(calenders.get(Calendar.MONTH)) + " " +calenders.get(Calendar.DAY_OF_MONTH)+ ","+calenders.get(Calendar.YEAR)
             }
-            builder.setMultiChoiceItems(dates, null,
-                DialogInterface.OnMultiChoiceClickListener { dialog, which, isChecked ->
-                    Log.v("choose collection", which.toString())
-                    dates[which]?.let { it1 -> selectedDates.add(it1) }
-                })
+            builder.setSingleChoiceItems(dates,0, DialogInterface.OnClickListener { dialog, which ->
+                Log.v("choose collection", which.toString())
+                selectDate = dates[which].toString()
+            })
             builder.setPositiveButton("YES",
                 DialogInterface.OnClickListener { dialog, which ->
-                    for (date in selectedDates){
-                        AddToMealPlan(date.toString())
-                    }
-                    Toast.makeText(this,"You have added track: " + recipe.title + " to mealplan" ,Toast.LENGTH_SHORT).show()
+                    AddToMealPlan(selectDate)
                 })
             builder.setNegativeButton("NO",DialogInterface.OnClickListener({dialog,which ->
             }))
@@ -286,7 +286,25 @@ class RecipeInformationActivity : AppCompatActivity() {
     }
 
     fun AddToMealPlan(date:String){
-        //数据库操作在这里写
+        recipeviewModel.getRecipeNutritionById(recipe.id){
+            val data= mapOf<String,Any>(
+                "img" to recipe.image!!,
+                "title" to recipe.title,
+                "recipeId" to recipe.id,
+                "calories" to it.calories.toLong(),
+                "carbs" to it.carbs.dropLast(1).toLong(),
+                "fat" to it.fat.dropLast(1).toLong(),
+                "protein" to it.protein.dropLast(1).toLong()
+            )
+            //数据库操作在这里写
+            val ref = db.collection("mealPlan").document(user_email)
+            ref.update(date, FieldValue.arrayUnion(data))
+                .addOnSuccessListener {
+                    Toast.makeText(this,"add success",Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener { e -> Log.e("MSG", "Error updating document", e) }
+        }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -318,5 +336,9 @@ class RecipeInformationActivity : AppCompatActivity() {
             }
         }
     }
-
+    private fun parseMonth(month:Int):String {
+        val list =  arrayListOf<String>("January", "February", "March", "April", "May", "June", "July",
+            "August", "September", "October", "November", "December")
+        return list[month]
+    }
 }
