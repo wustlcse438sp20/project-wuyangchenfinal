@@ -18,7 +18,7 @@ import java.util.*
 class MealRepository {
     val service=
         ApiMealClient.build().create(MealInterface::class.java)
-    val apiKey ="3d97dfa37191404d8f9a8a2c2123820c"
+    val apiKey ="28bb80cceac342b298452511c30c732f"
     val db = FirebaseFirestore.getInstance()
     fun mealplanner(resBody:MutableLiveData<MealSmart>,targetCalories:Long){
         CoroutineScope(Dispatchers.IO).launch {

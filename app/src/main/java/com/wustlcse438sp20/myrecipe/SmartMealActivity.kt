@@ -75,8 +75,8 @@ class SmartMealActivity : AppCompatActivity() {
                     } else {
                         val caloriesSuggest = 2000L
                         val proteinSuggest =  45L
-                        caloriesIntake.text = "Calories: ${caloriesSuggest}"
-                        proteinintake.text = "Protein: ${proteinSuggest}"
+                        caloriesIntake.text = "Calories: ${caloriesSuggest} Kcal"
+                        proteinintake.text = "Protein: ${proteinSuggest} g"
                         mealViewModel.getMealplanner(caloriesSuggest)
                     }
                 } else {
