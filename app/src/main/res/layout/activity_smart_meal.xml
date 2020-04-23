@@ -30,21 +30,21 @@
             android:padding="10dp"
             android:textSize="18sp"
             android:layout_marginTop="10dp"
-            android:text="recently intake:(negative means your intake is more than you need)"/>
+            android:text="Recently intake history: (negative means your intake is more than you need)"/>
         <TextView
             android:id="@+id/caloriesIntake"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:textSize="16sp"
-            android:text="Calories:"/>
+            android:text="Calories(Kcal):"/>
         <TextView
             android:id="@+id/proteinintake"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:textSize="16sp"
-            android:text="protein:"/>
+            android:text="Protein(g):"/>
 
     </LinearLayout>
 </ScrollView>
