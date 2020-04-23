@@ -34,15 +34,15 @@ class MainActivity : AppCompatActivity() {
         fragmentAdapter = MyPagerAdapter(supportFragmentManager)
         viewPager.adapter=fragmentAdapter
         tab_main.setupWithViewPager(viewPager)
-        // identify login status
-//        val currentUser = auth.currentUser
-//        if (currentUser != null){
-//            //Set email in global/application context
-//            globalVariable.setEmail(currentUser?.email!!)
-//            Log.v("get from global var",globalVariable.getEmail())
-//            val intent = Intent(this,MainPageActivity::class.java)
-//            startActivity(intent)
-//        }
+            //identify login status
+        val currentUser = auth.currentUser
+        if (currentUser != null){
+            //Set email in global/application context
+            globalVariable.setEmail(currentUser?.email!!)
+            Log.v("get from global var",globalVariable.getEmail())
+            val intent = Intent(this,MainPageActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     class MyPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {

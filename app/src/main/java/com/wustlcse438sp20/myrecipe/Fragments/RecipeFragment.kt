@@ -64,6 +64,9 @@ class RecipeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //set the hint for searchView
+        recipe_search.queryHint = "Search By Ingredients"
+        search_byname.queryHint = "Search By Name"
         //RecyclerView Adapter
         recyclerView = recyclerView_mainpage
         adapter = RecipeAdapter(context,recipeList,"")
@@ -98,6 +101,15 @@ class RecipeFragment : Fragment() {
             Log.v("ingredient获取到的recipe",recipeList.toString())
             adapter.notifyDataSetChanged()
         })
+        //recipebyName obeserve
+        recipeviewModel.recipeByName.observe(this, Observer {
+            recipeList.clear()
+            for (i in it.results){
+                val recipeShownFormat = RecipeShownFormat(i.id,i.title,"https://spoonacular.com/recipeImages/"+i.image)
+                recipeList.add(recipeShownFormat)
+            }
+            adapter.notifyDataSetChanged()
+        })
         //Random data obeserve
         recipeviewModel.recipeRandom.observe(this, Observer {
             recipeList.clear()
@@ -116,6 +128,16 @@ class RecipeFragment : Fragment() {
         recipe_search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
                 recipeviewModel.searchRecipeByIngredients(recipe_search.query.toString())
+                return false
+            }
+            override fun onQueryTextChange(s: String): Boolean {
+                return false
+            }
+        })
+
+        search_byname.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(s: String): Boolean {
+                recipeviewModel.searchRecipeByName(search_byname.query.toString())
                 return false
             }
             override fun onQueryTextChange(s: String): Boolean {
