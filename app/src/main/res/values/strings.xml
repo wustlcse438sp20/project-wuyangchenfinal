@@ -10,7 +10,7 @@
     <string name="AddToCollection">Add To Collection</string>
     <string name="AddToMealplan">Add To MealPlan</string>
     <string name="SimilarRecipe">Similar Recipes</string>
-    <string name="recipe_note">recipe note</string>
+    <string name="recipe_note">user note</string>
     <string name="edit_collection_name">edit collection name</string>
     <string name="edit_collection_description">edit collection description</string>
     <string name="save_button">save</string>

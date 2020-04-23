@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Html
@@ -35,9 +36,13 @@ import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.provider.MediaStore
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
+import java.io.ByteArrayOutputStream
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+
 
 
 class RecipeInformationActivity : AppCompatActivity() {
@@ -50,16 +55,25 @@ class RecipeInformationActivity : AppCompatActivity() {
     private lateinit var collectionIds: List<String>
     private var collectionInfos: ArrayList<Collection> = ArrayList()
     private lateinit var db : FirebaseFirestore
-    private var selectDate = "";
-
+    private var recipe_id:Int = 0
+    private var type:String = "search"
+    private var user_email = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Calling Application class (see application tag in AndroidManifest.xml)
+        var globalVariable = applicationContext as MyApplication
+        user_email = globalVariable.getEmail()!!
         setContentView(R.layout.activity_recipe_information)
         val bundle = intent.extras
-        val recipeId = bundle!!.getInt("recipeId")
-        var user_email = bundle!!.getString("user_email")
-        Log.v("recipeId get",recipeId.toString())
+        recipe_id = bundle!!.getInt("recipeId")
+        type = bundle!!.getString("type").toString()
+        if (type.equals("search")){
+            recipe_notes_layout.visibility = View.GONE
+        }
+        //var user_email = bundle!!.getString("user_email")
+        Log.v("recipeId get",recipe_id.toString())
         //RecyclerView Adapter
         recyclerview = ingredient_recyclerview
         adapter = IngredientAdapter(this,IngredientList)
@@ -77,7 +91,7 @@ class RecipeInformationActivity : AppCompatActivity() {
         //viewmodel
         recipeviewModel = ViewModelProviders.of(this).get(RecipeViewModel::class.java)
         // recipe details
-        recipeviewModel.searchRecipeInformation(recipeId)
+        recipeviewModel.searchRecipeInformation(recipe_id)
         recipeviewModel.recipeDetail.observe(this, Observer {
             if (it.image !== null)
                 Picasso.get().load(it.image).into(detail_image)
@@ -92,7 +106,7 @@ class RecipeInformationActivity : AppCompatActivity() {
             adapter.notifyDataSetChanged()
         })
         // similar recipes
-        recipeviewModel.searchSimilarRecipes(recipeId)
+        recipeviewModel.searchSimilarRecipes(recipe_id)
         recipeviewModel.similarRecipes.observe(this, Observer { similarRecipes ->
             textView_similar.text = similarRecipes.joinToString(separator = ", ",
                 prefix = "",
@@ -111,39 +125,20 @@ class RecipeInformationActivity : AppCompatActivity() {
         })
 
         // search for all collections in userProfile database
-        db.collection("userProfile")
+        collectionInfos.clear()
+        db.collection("collections")
             .whereEqualTo("email", user_email)
             .get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
                     Log.d("TAG", "${document.id} => ${document.data}")
-                    collectionIds = document.get("collections") as ArrayList<String>
-                    collectionInfos.clear()
-                    Log.v("collectionIds",collectionIds.toString())
-                    for(collectionId in collectionIds){
-                        db.collection("collections")
-                            .whereEqualTo(FieldPath.documentId(), collectionId)
-                            .get()
-                            .addOnSuccessListener { documents ->
-                                for (document in documents) {
-                                    Log.d("TAG", "${document.id} => ${document.data}")
-                                    collectionInfos.add(Collection(collectionId,document.get("name").toString(),document.get("description").toString(),document.get("recipes") as ArrayList<RecipeShownFormat>))
-                                    Log.v("id",collectionId.toString())
-                                    Log.v("name",document.get("name").toString())
-                                    Log.v("description",document.get("description").toString())
-                                    Log.v("recipes",document.get("recipes").toString())
-                                    Log.v("collectionInfos",collectionInfos.toString())
-                                }
-                            }
-                            .addOnFailureListener { exception ->
-                                Log.w("TAG", "Error getting documents: ", exception)
-                            }
-                    }
+                    collectionInfos.add(Collection(id=document.id,email=document.get("email").toString(),name=document.get("name").toString(),description = document.get("description").toString(),recipes = document.get("recipes") as ArrayList<RecipeShownFormat>))
                 }
             }
             .addOnFailureListener { exception ->
                 Log.w("TAG", "Error getting documents: ", exception)
             }
+
         //take pic
         recipe_add_image_button.setOnClickListener(){
             val permission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
@@ -160,30 +155,24 @@ class RecipeInformationActivity : AppCompatActivity() {
         add_to_mealplan.setOnClickListener(){
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
             builder.setTitle("Add to a collection")
-            var dates = arrayOfNulls<CharSequence>(7)
+            var dates = arrayOfNulls<CharSequence>(5)
             var selectedDates: ArrayList<CharSequence> = ArrayList()
             val calenders = Calendar.getInstance()
-            calenders.add(Calendar.DAY_OF_MONTH, -1)
-            dates[0] =parseMonth(calenders.get(Calendar.MONTH)) + " " +calenders.get(Calendar.DAY_OF_MONTH)+ ","+calenders.get(Calendar.YEAR)
-            selectDate =dates[0].toString()
-            for (i in 1..6) {
-                calenders.add(Calendar.DAY_OF_MONTH, +1)
-                dates[i] =parseMonth(calenders.get(Calendar.MONTH)) + " " +calenders.get(Calendar.DAY_OF_MONTH)+ ","+calenders.get(Calendar.YEAR)
+            for (i in 0..4){
+                dates[i] = calenders.get(Calendar.DAY_OF_MONTH).toString()
+                //这里面日期的格式，你自己调
             }
-            builder.setSingleChoiceItems(dates,0, DialogInterface.OnClickListener { dialog, which ->
-                Log.v("choose collection", which.toString())
-//                dates[which]?.let { it1 -> selectedDates.add(it1) }
-                selectDate = dates[which].toString()
-            })
-//            builder.setMultiChoiceItems(dates, null,
-//                DialogInterface.OnMultiChoiceClickListener { dialog, which, isChecked ->
-//                    Log.v("choose collection", which.toString())
-//                    dates[which]?.let { it1 -> selectedDates.add(it1) }
-//                })
+            builder.setMultiChoiceItems(dates, null,
+                DialogInterface.OnMultiChoiceClickListener { dialog, which, isChecked ->
+                    Log.v("choose collection", which.toString())
+                    dates[which]?.let { it1 -> selectedDates.add(it1) }
+                })
             builder.setPositiveButton("YES",
                 DialogInterface.OnClickListener { dialog, which ->
-                    AddToMealPlan(selectDate)
-//                    Toast.makeText(this,"You have added track: " + recipe.title + " to mealplan" ,Toast.LENGTH_SHORT).show()
+                    for (date in selectedDates){
+                        AddToMealPlan(date.toString())
+                    }
+                    Toast.makeText(this,"You have added track: " + recipe.title + " to mealplan" ,Toast.LENGTH_SHORT).show()
                 })
             builder.setNegativeButton("NO",DialogInterface.OnClickListener({dialog,which ->
             }))
@@ -222,6 +211,7 @@ class RecipeInformationActivity : AppCompatActivity() {
                         for (selectedCollection in selectedCollections){
                             var collection_recipes: ArrayList<RecipeShownFormat> = ArrayList()
 
+                            // update recipe into collection(s)
                             db.collection("collections")
                                 .whereEqualTo(FieldPath.documentId(), selectedCollection.id)
                                 .get()
@@ -229,16 +219,12 @@ class RecipeInformationActivity : AppCompatActivity() {
                                     for (document in documents) {
                                         Log.d("TAG", "${document.id} => ${document.data}")
                                         var collection_recipes = document.get("recipes") as ArrayList<MutableMap<String,Any>>
-//                                        for(collection_recipe in document.get("recipes") as ArrayList<RecipeShownFormat>){
-//                                            collection_recipes.add(collection_recipe)
-//                                        }
                                         Log.v("recipes type",collection_recipes.toString())
                                         val new_recipe:MutableMap<String,Any> = HashMap()
                                         new_recipe["id"] = recipe.id
                                         new_recipe["title"] = recipe.title
                                         new_recipe["image"] = recipe.image!!
                                         collection_recipes.add(new_recipe)
-                                        //collection_recipes.add(RecipeShownFormat(recipe.id,recipe.title,recipe.image!!))
                                         Log.v("recipes type",collection_recipes.toString())
 
                                         //firebase database can only be updated by map
@@ -274,22 +260,33 @@ class RecipeInformationActivity : AppCompatActivity() {
                 dialog.show()
             }
         }//listener
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        // load user note image
+        loadNoteImage()
+    }
+
+    fun loadNoteImage(){
+        // load recipe note image from firebase storage
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference
+        storageRef.child(recipe_id.toString()+"_note.jpg").getBytes(Long.MAX_VALUE).addOnSuccessListener {
+            // Data for "images/user_email_profile.jpg" is returned, use this as needed
+            var bitmap:Bitmap = BitmapFactory.decodeByteArray(it, 0, it.size);
+            Log.v("成功加载 bitmap",bitmap.toString())
+            recipe_user_image.setImageBitmap(bitmap)
+        }.addOnFailureListener {
+            // Handle any errors
+            Log.v("加载失败 bitmap","")
+        }
     }
 
     fun AddToMealPlan(date:String){
-        val data= mapOf<String,Any>(
-            "img" to recipe.image!!,
-            "title" to recipe.title,
-            "recipeId" to recipe.id
-        )
         //数据库操作在这里写
-        val ref = db.collection("mealPlan").document(intent.getStringExtra("user_email"))
-        ref.update(date, FieldValue.arrayUnion(data))
-            .addOnSuccessListener {
-                Toast.makeText(this,"add success",Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener { e -> Log.e("MSG", "Error updating document", e) }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -297,14 +294,29 @@ class RecipeInformationActivity : AppCompatActivity() {
         if (requestCode == 1){
             if (resultCode == Activity.RESULT_OK){
                 val bitmap = data!!.extras!!["data"] as Bitmap
-                recipe_user_image.setImageBitmap(bitmap)
-                //存数据库
+                //recipe_user_image.setImageBitmap(bitmap)
+
+                // save to firebase storage
+                val storage: FirebaseStorage = FirebaseStorage.getInstance()
+                // Create a storage reference from our app
+                val storageRef = storage.getReferenceFromUrl("gs://final-project-cfa98.appspot.com")
+                // Create a reference to "user_email_profile.jpg"
+                val profileRef = storageRef.child(recipe_id.toString()+"_note.jpg")
+
+                var baos: ByteArrayOutputStream = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                var data = baos.toByteArray()
+                val uploadTask = profileRef.putBytes(data)
+                uploadTask
+                    .addOnFailureListener(OnFailureListener {
+                        // Handle unsuccessful uploads
+                    })
+                    .addOnSuccessListener(OnSuccessListener<UploadTask.TaskSnapshot> { taskSnapshot ->
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                        loadNoteImage()
+                    })
             }
         }
     }
-    private fun parseMonth(month:Int):String {
-        val list =  arrayListOf<String>("January", "February", "March", "April", "May", "June", "July",
-            "August", "September", "October", "November", "December")
-        return list[month]
-    }
+
 }

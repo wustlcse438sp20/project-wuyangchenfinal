@@ -8,6 +8,7 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.FieldPath
@@ -15,26 +16,33 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.QuerySnapshot
 import com.wustlcse438sp20.myrecipe.Adapter.RecipeAdapter
+import com.wustlcse438sp20.myrecipe.Adapter.SimpleItemTouchHelperCallback
 import com.wustlcse438sp20.myrecipe.ViewModels.RecipeViewModel
 import com.wustlcse438sp20.myrecipe.data.Collection
 import com.wustlcse438sp20.myrecipe.data.RecipeShownFormat
 import kotlinx.android.synthetic.main.activity_display_collection.*
 
+
 class DisplayCollectionActivity : AppCompatActivity() {
 
-    private var collectionList: ArrayList<Collection> = ArrayList()
     private var recipeList: ArrayList<RecipeShownFormat> = ArrayList()
     lateinit var recyclerView: RecyclerView
     lateinit var adapter: RecipeAdapter
+    var user_email:String = ""
     var collection_id:String = ""
     private lateinit var db : FirebaseFirestore
     lateinit var recipeviewModel: RecipeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Calling Application class (see application tag in AndroidManifest.xml)
+        var globalVariable = applicationContext as MyApplication
+        user_email = globalVariable.getEmail()!!
         setContentView(R.layout.activity_display_collection)
         val bundle = intent.extras
         collection_id = bundle!!.getString("collectionId")!!
+        //user_email = bundle!!.getString("user_email")!!
 
         // create an instance of the firebase database
         db = FirebaseFirestore.getInstance()
@@ -42,30 +50,40 @@ class DisplayCollectionActivity : AppCompatActivity() {
             .setTimestampsInSnapshotsEnabled(true)
             .build()
         db.firestoreSettings = settings
-
-
+        showCollection()
+        delete_collection_button.setOnClickListener(){
+            db.collection("collections").document(collection_id)
+                .delete()
+                .addOnCompleteListener(OnCompleteListener<Void> { task ->
+                    if (task.isSuccessful) {
+                        Log.v("Delete from database", "Sucess")
+                        println("Delete collection success !!!!!!!!!!!!!!!!!!")
+                    }
+                    else {
+                        Log.v("Delete from database", "Fail")
+                        println("failed to delete collection")
+                    }
+                })
+            finish()
+        }
         display_collection_return_button.setOnClickListener(){
             finish()
         }
 
     }
 
+
     override fun onStart() {
         super.onStart()
+    }
+
+    fun showCollection(){
 
         val intent = intent
         val bundle = intent.extras
         collection_id = bundle!!.getString("collectionId")!!
 
-        //create some data
-        collectionList.clear()
-//        var temp_recipeList1: ArrayList<RecipeShownFormat> = ArrayList()
-//        temp_recipeList1.add(RecipeShownFormat(633508,"Baked Cheese Manicotti","https://spoonacular.com/recipeImages/Baked-Cheese-Manicotti-633508.jpg"))
-//        collectionList.add(Collection(1,"American Food","this collection contains American food",temp_recipeList1))
-//        var temp_recipeList2: ArrayList<RecipeShownFormat> = ArrayList()
-//        temp_recipeList2.add(RecipeShownFormat(716429,"Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs","https://spoonacular.com/recipeImages/716429-556x370.jpg"))
-//        collectionList.add(Collection(2,"Foreign Food","this collection contains Foreign food",temp_recipeList2))
-
+        recipeList.clear()
         db.collection("collections")
             .whereEqualTo(FieldPath.documentId(), collection_id)
             .get()
@@ -75,8 +93,14 @@ class DisplayCollectionActivity : AppCompatActivity() {
                     println("search success !!!!!!!!!!!!!!!!!!")
                     for (document in task.result!!) {
                         display_collection_name.text = document.get("name").toString()
-                            for(recipe in document.get("recipes") as ArrayList<RecipeShownFormat>){
-                            recipeList.add(recipe)
+                        for(recipe in document.get("recipes") as ArrayList<MutableMap<String,Any>>){
+                            var recipe_id:Int =recipe["id"].toString().toInt()
+                            var recipe_title:String = recipe["title"].toString()
+                            var recipe_image:String = recipe["image"].toString()
+                            Log.v("recipe id",recipe_id.toString())
+                            Log.v("recipe title",recipe_title)
+                            Log.v("recipe image",recipe_image)
+                            recipeList.add(RecipeShownFormat(recipe_id,recipe_title,recipe_image))
                         }
                     }
                     adapter.notifyDataSetChanged()
@@ -86,10 +110,9 @@ class DisplayCollectionActivity : AppCompatActivity() {
                     println("failed to get user data")
                 }
             })
-
         //RecyclerView Adapter
         recyclerView = recipe_in_collection_recyclerview
-        adapter = RecipeAdapter(this,recipeList)
+        adapter = RecipeAdapter(this,recipeList,collection_id)
         recyclerView.layoutManager = GridLayoutManager(this,2)
         recyclerView.adapter = adapter
         adapter.setOnItemClick(object :RecipeAdapter.OnItemClickListener{
@@ -97,24 +120,18 @@ class DisplayCollectionActivity : AppCompatActivity() {
                 val detail_intent = Intent(this@DisplayCollectionActivity, RecipeInformationActivity::class.java)
                 var bundle = Bundle()
                 bundle.putInt("recipeId", recipeList[position].id)
+                bundle.putString("type","collection")
                 Log.v("send recipeId to detail",recipeList[position].id.toString())
                 detail_intent.putExtras(bundle)
                 startActivity(detail_intent)
             }
         })
 
-        // get collection from collectionId
-//        Log.v("get collectionId",collection_id.toString())
-//        collectionList.filter { it.id == collection_id }.forEach {
-//            Log.v("filter collectionId",it.id.toString())
-//            Log.v("recipes",it.recipes.toString())
-//            Log.v("collection for id=1",it.toString())
-//            recipeList.clear()
-//            recipeList.addAll(it.recipes)
-//            display_collection_name.text = it.name
-//        }
-//        adapter.notifyDataSetChanged()
-
+        //callback ItemTouch
+        val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(adapter,collection_id)
+        val touchHelper = ItemTouchHelper(callback)
+        touchHelper.attachToRecyclerView(recyclerView)
     }
+
 
 }

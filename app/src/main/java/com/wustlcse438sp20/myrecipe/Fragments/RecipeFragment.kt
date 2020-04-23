@@ -2,6 +2,7 @@ package com.wustlcse438sp20.myrecipe.Fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.wustlcse438sp20.myrecipe.Adapter.RecipeAdapter
 import com.wustlcse438sp20.myrecipe.Adapter.SimpleItemTouchHelperCallback
+import com.wustlcse438sp20.myrecipe.MyApplication
 import com.wustlcse438sp20.myrecipe.R
 import com.wustlcse438sp20.myrecipe.RecipeInformationActivity
 import com.wustlcse438sp20.myrecipe.ViewModels.RecipeViewModel
@@ -39,11 +41,15 @@ class RecipeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Calling Application class (see application tag in AndroidManifest.xml)
+        var globalVariable = getActivity()?.getApplicationContext() as MyApplication
+        user_email = globalVariable.getEmail()!!
         arguments?.let {
         }
 
-        val activity_intent = activity!!.intent
-        user_email = activity_intent!!.extras!!.getString("user_email")!!
+//        val activity_intent = activity!!.intent
+//        user_email = activity_intent!!.extras!!.getString("user_email")!!
 
     }
 
@@ -58,13 +64,16 @@ class RecipeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //set the hint for searchView
+        recipe_search.queryHint = "Search By Ingredients"
+        search_byname.queryHint = "Search By Name"
         //RecyclerView Adapter
         recyclerView = recyclerView_mainpage
-        adapter = RecipeAdapter(context,recipeList)
+        adapter = RecipeAdapter(context,recipeList,"")
         //callback ItemTouch
-        val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(adapter)
-        val touchHelper = ItemTouchHelper(callback)
-        touchHelper.attachToRecyclerView(recyclerView)
+//        val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(adapter)
+//        val touchHelper = ItemTouchHelper(callback)
+//        touchHelper.attachToRecyclerView(recyclerView)
         recyclerView.layoutManager = GridLayoutManager(context,2)
         recyclerView.adapter = adapter
         adapter.setOnItemClick(object :RecipeAdapter.OnItemClickListener{
@@ -72,7 +81,8 @@ class RecipeFragment : Fragment() {
                 val intent  =Intent(context,RecipeInformationActivity::class.java)
                 var bundle = Bundle()
                 bundle.putInt("recipeId",recipeList[position].id)
-                bundle.putString("user_email",user_email)
+                bundle.putString("type","search")
+                //bundle.putString("user_email",user_email)
                 intent.putExtras(bundle)
                 activity?.startActivity(intent)
             }
@@ -88,6 +98,16 @@ class RecipeFragment : Fragment() {
                 val recipeShownFormat = RecipeShownFormat(i.id,i.title,i.image)
                 recipeList.add(recipeShownFormat)
             }
+            Log.v("ingredient获取到的recipe",recipeList.toString())
+            adapter.notifyDataSetChanged()
+        })
+        //recipebyName obeserve
+        recipeviewModel.recipeByName.observe(this, Observer {
+            recipeList.clear()
+            for (i in it.results){
+                val recipeShownFormat = RecipeShownFormat(i.id,i.title,"https://spoonacular.com/recipeImages/"+i.image)
+                recipeList.add(recipeShownFormat)
+            }
             adapter.notifyDataSetChanged()
         })
         //Random data obeserve
@@ -101,12 +121,23 @@ class RecipeFragment : Fragment() {
                     recipeShownFormat = RecipeShownFormat(i.id,i.title,i.image)
                 recipeList.add(recipeShownFormat)
             }
+            Log.v("random获取到的recipe",recipeList.toString())
             adapter.notifyDataSetChanged()
         })
         //searchView
         recipe_search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
-                recipeviewModel.searchRecipeByIngredients("apple")
+                recipeviewModel.searchRecipeByIngredients(recipe_search.query.toString())
+                return false
+            }
+            override fun onQueryTextChange(s: String): Boolean {
+                return false
+            }
+        })
+
+        search_byname.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(s: String): Boolean {
+                recipeviewModel.searchRecipeByName(search_byname.query.toString())
                 return false
             }
             override fun onQueryTextChange(s: String): Boolean {

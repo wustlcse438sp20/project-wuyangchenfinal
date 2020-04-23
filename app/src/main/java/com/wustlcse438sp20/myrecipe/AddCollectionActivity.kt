@@ -23,11 +23,14 @@ import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 class AddCollectionActivity : AppCompatActivity() {
 
     private var user_email:String = ""
-    private var collection_id:String = ""
     private lateinit var db : FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Calling Application class (see application tag in AndroidManifest.xml)
+        var globalVariable = applicationContext as MyApplication
+        user_email = globalVariable.getEmail()!!
         setContentView(R.layout.activity_add_collection)
 
         // create an instance of the firebase database
@@ -44,82 +47,45 @@ class AddCollectionActivity : AppCompatActivity() {
 
         val intent = intent
         val bundle = intent.extras
-        user_email = bundle!!.getString("user_email")!!
+//        user_email = bundle!!.getString("user_email")!!
 
 
         save_collection_button.setOnClickListener(){
-            //create a new user
-            val collection = Collection(
-                "",
-                edit_collection_name.text.toString(),
-                edit_description.text.toString(),
-                ArrayList<RecipeShownFormat>()
-            )
+            if (edit_collection_name.text.toString() !="" && edit_collection_name.text !=null && edit_description.text.toString()!=""&& edit_description.text!=null){
+                //create a new user
+                val collection = Collection(
+                    "",
+                    user_email,
+                    edit_collection_name.text.toString(),
+                    edit_description.text.toString(),
+                    ArrayList<RecipeShownFormat>()
+                )
+
+                //store values for the database
+                val recipes:ArrayList<MutableMap<String,Any>> = ArrayList()
+                val collectionMap: MutableMap<String, Any> = HashMap()
+                collectionMap["email"] = user_email
+                collectionMap["name"] = collection.name
+                collectionMap["description"] = collection.description
+                collectionMap["recipes"] = recipes
 
 
-//            for (model in mUserInitialPresenter.getUserInitialModel().getServicesOffered()) {
-//                val servicesOffered = HashMap()
-//                servicesOffered.put("serviceName", model.getServiceName())
-//                servicesOffered.put("price", model.getPrice())
-//                list.add(servicesOffered)
-//            }
-//            dataMap.put("servicesOffered", list)
+                // Add a new collection to collections database with a generated documentID
+                db.collection("collections")
+                    .add(collectionMap)
+                    .addOnSuccessListener(OnSuccessListener<DocumentReference> { documentReference ->
+                        Toast.makeText(this,  "collection created in the database!",Toast.LENGTH_LONG).show()
+                        //collection_id = documentReference.id
+                    })
+                    .addOnFailureListener(OnFailureListener { e ->
+                        Toast.makeText(this, "Failed to create collection in the database!", Toast.LENGTH_LONG)
+                    })
 
-            //store values for the database
-            val recipes:ArrayList<MutableMap<String,Any>> = ArrayList()
-            val collectionMap: MutableMap<String, Any> = HashMap()
-            collectionMap["name"] = collection.name
-            collectionMap["description"] = collection.description
-            collectionMap["recipes"] = recipes
+                finish()
+            }else{
+                Toast.makeText(this,"Please Input the valid content",Toast.LENGTH_SHORT).show()
+            }
 
-
-            // Add a new collection to collections database with a generated documentID
-            db.collection("collections")
-                .add(collectionMap)
-                .addOnSuccessListener(OnSuccessListener<DocumentReference> { documentReference ->
-                    Toast.makeText(this,  "collection created in the database!",Toast.LENGTH_LONG).show()
-                    collection_id = documentReference.id
-
-                    // update in userProfile database
-                    db.collection("userProfile")
-                        .whereEqualTo("email", user_email)
-                        .get()
-                        .addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
-
-                            if (task.isSuccessful) {
-                                Log.v("Search in database", "Sucess")
-                                println("search success !!!!!!!!!!!!!!!!!!")
-                                for (document in task.result!!) {
-                                    var collections: ArrayList<String> = document.get("collections") as ArrayList<String>
-                                    collections.add(collection_id)
-
-                                    document.reference
-                                        .update("collections",collections)
-                                        .addOnSuccessListener {
-                                            Log.d(
-                                                "Database Update",
-                                                "collection in userProfile: DocumentSnapshot successfully updated!"
-                                            )
-                                        }
-                                        .addOnFailureListener { e ->
-                                            Log.w(
-                                                "Database Update",
-                                                "collection in userProfile: Error updating document",
-                                                e
-                                            )
-                                        }
-                                }
-                            } else {
-                                Log.v("Search in database", "Fail")
-                                println("failed to get user data")
-                            }
-                        })
-                })
-                .addOnFailureListener(OnFailureListener { e ->
-                    Toast.makeText(this, "Failed to create collection in the database!", Toast.LENGTH_LONG)
-                })
-
-            finish()
         }
 
         cancel_collection_button.setOnClickListener(){

@@ -2,9 +2,12 @@ package com.wustlcse438sp20.myrecipe.Adapter
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
 
 
-class SimpleItemTouchHelperCallback(private val mAdapter: ItemTouchHelperAdapter) :
+class SimpleItemTouchHelperCallback(private val mAdapter: ItemTouchHelperAdapter,private var collection_id:String) :
+
     ItemTouchHelper.Callback() {
     override fun getMovementFlags(
         recyclerView: RecyclerView,
