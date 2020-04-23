@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,6 +19,8 @@ import com.wustlcse438sp20.myrecipe.MainPageActivity
 import com.wustlcse438sp20.myrecipe.MyApplication
 
 import kotlinx.android.synthetic.main.fragment_login.*
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 
 /**
@@ -58,8 +61,13 @@ class LoginFragment : Fragment() {
             if (signin_email.text != null && signin_email.text.toString() != "" && signin_password.text != null && signin_password.text.toString() != "") {
                 val email = signin_email.text.toString()
                 val password = signin_password.text.toString()
-                button_signin.isEnabled = false
-                signIn(email, password)
+                if (isEmail(email)){
+                    button_signin.isEnabled = false
+                    signIn(email, password)
+                }else{
+                    Toast.makeText(context,"Please Inpute a valid email",Toast.LENGTH_SHORT).show()
+                }
+
             }
         }
     }
@@ -96,7 +104,21 @@ class LoginFragment : Fragment() {
         activity?.startActivity(intent)
     }
 
+    fun isEmail(strEmail:String):Boolean {
+        val strPattern =
+            "^[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]$"
+        if (TextUtils.isEmpty(strPattern)) {
+            return false
+        } else{
+           val p:Pattern = Pattern.compile(strPattern)
+            val m:Matcher = p.matcher(strEmail)
+            return m.matches()
+        }
+    }
+
 
 
 
 }
+
+

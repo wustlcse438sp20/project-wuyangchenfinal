@@ -78,9 +78,9 @@ class ProfileFragment : Fragment() {
                         Log.v("user email is",user_email)
                         profile_email.text = user_email
                         profile_username.text = document.get("username").toString()
-                        profile_height.text  = document.get("height").toString()
-                        profile_weight.text  = document.get("weight").toString()
-                        profile_goal.text  = document.get("goal").toString()
+                        profile_height.text  = document.get("height").toString()+" cm"
+                        profile_weight.text  = document.get("weight").toString()+" kg"
+                        profile_goal.text  = "Goal: " + document.get("goal").toString()
                         if (document.get("image") !== null) {
                             val image_url = document.get("image").toString()
                             // load firebase storage image
@@ -192,6 +192,8 @@ class ProfileFragment : Fragment() {
         if(onResumeFlag){
             var mUpdatePageHandler: Handler = Handler()
             mUpdatePageHandler.postDelayed(kotlinx.coroutines.Runnable {
+                var globalVariable = getActivity()?.getApplicationContext() as MyApplication
+                user_email = globalVariable.getEmail()!!
                 // display profile and collections
                 updateDisplay()
             },1000)

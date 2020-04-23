@@ -29,6 +29,6 @@
     <string name="height">height</string>
     <string name="weight">weight</string>
     <string name="goal">goal</string>
-    <string name="collection_title">collection title</string>
+    <string name="collection_title">collections</string>
     <string name="add_collection">add</string>
 </resources>
