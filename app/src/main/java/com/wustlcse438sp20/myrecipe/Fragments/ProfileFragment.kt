@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
@@ -62,6 +63,10 @@ class ProfileFragment : Fragment() {
             .setTimestampsInSnapshotsEnabled(true)
             .build()
         db.setFirestoreSettings(settings)
+        button_logout.setOnClickListener({
+            FirebaseAuth.getInstance().signOut()
+            activity!!.onBackPressed()
+        })
     }
 
     fun updateDisplay(){
