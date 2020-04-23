@@ -63,10 +63,6 @@ class ProfileFragment : Fragment() {
             .setTimestampsInSnapshotsEnabled(true)
             .build()
         db.setFirestoreSettings(settings)
-        button_logout.setOnClickListener({
-            FirebaseAuth.getInstance().signOut()
-            activity!!.onBackPressed()
-        })
     }
 
     fun updateDisplay(){
@@ -151,7 +147,10 @@ class ProfileFragment : Fragment() {
         adapter = CollectionAdapter(context, collectionList)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
-
+        button_logout.setOnClickListener({
+            FirebaseAuth.getInstance().signOut()
+            activity!!.onBackPressed()
+        })
         adapter.setOnItemClick(object: CollectionAdapter.OnItemClickListener{
             override fun OnItemClick(view: View, position: Int) {
                 Log.v("Click on Collection",position.toString())
