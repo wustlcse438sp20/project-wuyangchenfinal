@@ -1,11 +1,14 @@
 package com.wustlcse438sp20.myrecipe.Adapter
 
+import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.wustlcse438sp20.myrecipe.R
+import com.wustlcse438sp20.myrecipe.RecipeInformationActivity
 import com.wustlcse438sp20.myrecipe.data.Meal
 import kotlinx.android.synthetic.main.item_meal.view.*
 
@@ -43,10 +46,12 @@ class MealAdapter (private var list: ArrayList<Meal>):
             }
             Picasso.get().load(url).into(holder.itemView.meal_image)
         }
-        if (onItemClickListener != null){
-            holder.itemView.setOnClickListener{
-                onItemClickListener!!.OnItemClick(holder.itemView, position)
-            }
+        holder.itemView.setOnClickListener{
+            val detail_intent = Intent(holder.itemView.context, RecipeInformationActivity::class.java)
+            var bundle = Bundle()
+            bundle.putInt("recipeId", list[position].id)
+            detail_intent.putExtras(bundle)
+            holder.itemView.context.startActivity(detail_intent)
         }
     }
 
