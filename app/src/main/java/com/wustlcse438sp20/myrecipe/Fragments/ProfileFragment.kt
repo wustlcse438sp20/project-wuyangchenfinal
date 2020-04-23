@@ -67,6 +67,8 @@ class ProfileFragment : Fragment() {
 
     fun updateDisplay(){
         // display profile and collections for this user
+        var globalVariable = getActivity()?.getApplicationContext() as MyApplication
+        user_email = globalVariable.getEmail()!!
         db.collection("userProfile")
             .whereEqualTo("email", user_email)
             .get()
