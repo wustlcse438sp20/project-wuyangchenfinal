@@ -134,6 +134,11 @@ class SignUpFragment : Fragment() {
             .addOnFailureListener(OnFailureListener { e ->
                 Toast.makeText(context, "Failed to create user in the database!", Toast.LENGTH_LONG)
             })
+        db.collection("mealPlan").document(user_profile.email)
+            .set(mapOf("time" to System.currentTimeMillis()))
+            .addOnCompleteListener {
+
+            }
     }
 
 }

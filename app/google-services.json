@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "447686304189",
-    "firebase_url": "https://final-project-cfa98.firebaseio.com",
-    "project_id": "final-project-cfa98",
-    "storage_bucket": "final-project-cfa98.appspot.com"
+    "project_number": "607366829029",
+    "firebase_url": "https://android-project-c2e19.firebaseio.com",
+    "project_id": "android-project-c2e19",
+    "storage_bucket": "android-project-c2e19.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:447686304189:android:2be39f2e94b76575c372d4",
+        "mobilesdk_app_id": "1:607366829029:android:778fcc62ade9ff8008950c",
         "android_client_info": {
           "package_name": "com.wustlcse438sp20.myrecipe"
         }
       },
       "oauth_client": [
         {
-          "client_id": "447686304189-pj6c1ub8k1f05fp9n3ubp6duvf8m4mml.apps.googleusercontent.com",
+          "client_id": "607366829029-4m4en192tick08joi121vgdoa9pvnoas.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCmQ_pIXVMDAQFvDmpVbsk-2UdpBeO06sM"
+          "current_key": "AIzaSyD_-lELDKUptwWGRmj_9ycfVHWut94DBqI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "447686304189-pj6c1ub8k1f05fp9n3ubp6duvf8m4mml.apps.googleusercontent.com",
+              "client_id": "607366829029-4m4en192tick08joi121vgdoa9pvnoas.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

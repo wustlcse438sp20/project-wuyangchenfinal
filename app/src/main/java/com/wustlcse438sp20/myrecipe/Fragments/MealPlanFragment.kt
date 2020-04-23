@@ -42,11 +42,14 @@ import java.util.*
 class MealPlanFragment : Fragment() {
     private var selectedDate: LocalDate? = null
     private val today = LocalDate.now()
+    private var user_email:String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
 
         }
+        val activity_intent = activity!!.intent
+        user_email = activity_intent!!.extras!!.getString("user_email")!!
     }
 
     override fun onCreateView(
@@ -86,6 +89,7 @@ class MealPlanFragment : Fragment() {
                     val intent = Intent(this@MealPlanFragment.activity,MealAnalysisActivity::class.java)
                     Log.e("MSG","${day.date.yearMonth.month.name.toLowerCase().capitalize()} ${day.date.dayOfMonth},${day.date.year}")
                     intent.putExtra("date","${day.date.yearMonth.month.name.toLowerCase().capitalize()} ${day.date.dayOfMonth},${day.date.year}")
+                    intent.putExtra("user_email",user_email)
                     startActivity(intent)
                 }
                 return@with this as TextView
@@ -107,6 +111,7 @@ class MealPlanFragment : Fragment() {
                             textView.setBackgroundResource(R.drawable.example_2_selected_bg)
                         }
                         today -> {
+
                             textView.setTextColorRes(R.color.example_2_red)
                             textView.background = null
                         }
@@ -131,7 +136,7 @@ class MealPlanFragment : Fragment() {
                 container.textView.text = "${month.yearMonth.month.name.toLowerCase().capitalize()} "
             }
         }
-
+        exTwoCalendar.scrollToDate(today)
     }
 
     fun daysOfWeekFromLocale(): Array<DayOfWeek> {
