@@ -106,7 +106,7 @@ class LoginFragment : Fragment() {
 
     fun isEmail(strEmail:String):Boolean {
         val strPattern =
-            "^[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]$"
+            "^[a-zA-Z0-9][\\w\\.-]*@[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]$"
         if (TextUtils.isEmpty(strPattern)) {
             return false
         } else{
