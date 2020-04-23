@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
@@ -146,7 +147,10 @@ class ProfileFragment : Fragment() {
         adapter = CollectionAdapter(context, collectionList)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
-
+        button_logout.setOnClickListener({
+            FirebaseAuth.getInstance().signOut()
+            activity!!.onBackPressed()
+        })
         adapter.setOnItemClick(object: CollectionAdapter.OnItemClickListener{
             override fun OnItemClick(view: View, position: Int) {
                 Log.v("Click on Collection",position.toString())

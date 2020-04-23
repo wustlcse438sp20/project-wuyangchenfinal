@@ -31,4 +31,5 @@
     <string name="goal">goal</string>
     <string name="collection_title">collections</string>
     <string name="add_collection">add</string>
+    <string name="log_out">log out</string>
 </resources>

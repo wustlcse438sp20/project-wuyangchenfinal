@@ -14,8 +14,8 @@ class RecipeRepository {
     val service=
         ApiClient.makeRetrofitService()
     //    val apiKey ="3d97dfa37191404d8f9a8a2c2123820c"
-   // val apiKey ="28bb80cceac342b298452511c30c732f"
     val apiKey ="28bb80cceac342b298452511c30c732f"
+//    val apiKey ="3d97dfa37191404d8f9a8a2c2123820c"
     fun searchRecipeByIngredients(resBody:MutableLiveData<List<RecipeByIngredients>>, ingredients: String){
         CoroutineScope(Dispatchers.IO).launch {
             val response = service.searchRecipeByIngredients(ingredients,apiKey)
