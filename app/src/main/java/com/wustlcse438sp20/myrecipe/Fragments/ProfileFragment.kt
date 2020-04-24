@@ -179,6 +179,7 @@ class ProfileFragment : Fragment() {
 
         // display profile and collections
         updateDisplay()
+
     }
 
     // This method is called when the second activity finishes
@@ -190,13 +191,10 @@ class ProfileFragment : Fragment() {
             if (resultCode == Activity.RESULT_OK) {
 //                val myreturn = data?.extras?.getString("return")
                 // update the ui
-                var mUpdatePageHandler: Handler = Handler()
-                mUpdatePageHandler.postDelayed(kotlinx.coroutines.Runnable {
                     var globalVariable = getActivity()?.getApplicationContext() as MyApplication
                     user_email = globalVariable.getEmail()!!
                     // display profile and collections
                     updateDisplay()
-                },1000)
             }
         }
     }
