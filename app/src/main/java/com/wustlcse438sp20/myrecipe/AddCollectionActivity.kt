@@ -76,16 +76,17 @@ class AddCollectionActivity : AppCompatActivity() {
                 db.collection("collections")
                     .add(collectionMap)
                     .addOnSuccessListener(OnSuccessListener<DocumentReference> { documentReference ->
+                        // Put the String to pass back into an Intent and close this activity
+                        val intent = Intent()
+                        setResult(Activity.RESULT_OK, intent)
+                        finish()
                         Toast.makeText(this,  "collection created in the database!",Toast.LENGTH_LONG).show()
                         //collection_id = documentReference.id
                     })
                     .addOnFailureListener(OnFailureListener { e ->
                         Toast.makeText(this, "Failed to create collection in the database!", Toast.LENGTH_LONG)
                     })
-                // Put the String to pass back into an Intent and close this activity
-                val intent = Intent()
-                setResult(Activity.RESULT_OK, intent)
-                finish()
+
             }else{
                 Toast.makeText(this,"Please Input the valid content",Toast.LENGTH_SHORT).show()
             }

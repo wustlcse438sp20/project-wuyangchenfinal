@@ -59,16 +59,17 @@ class DisplayCollectionActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         Log.v("Delete from database", "Sucess")
                         println("Delete collection success !!!!!!!!!!!!!!!!!!")
+                        // Put the String to pass back into an Intent and close this activity
+                        val intent = Intent()
+                        setResult(Activity.RESULT_OK, intent)
+                        finish()
                     }
                     else {
                         Log.v("Delete from database", "Fail")
                         println("failed to delete collection")
                     }
                 })
-            // Put the String to pass back into an Intent and close this activity
-            val intent = Intent()
-            setResult(Activity.RESULT_OK, intent)
-            finish()
+
         }
         display_collection_return_button.setOnClickListener(){
             // Put the String to pass back into an Intent and close this activity
