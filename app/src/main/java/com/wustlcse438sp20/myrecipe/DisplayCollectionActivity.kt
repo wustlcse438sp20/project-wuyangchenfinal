@@ -1,5 +1,6 @@
 package com.wustlcse438sp20.myrecipe
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -64,9 +65,15 @@ class DisplayCollectionActivity : AppCompatActivity() {
                         println("failed to delete collection")
                     }
                 })
+            // Put the String to pass back into an Intent and close this activity
+            val intent = Intent()
+            setResult(Activity.RESULT_OK, intent)
             finish()
         }
         display_collection_return_button.setOnClickListener(){
+            // Put the String to pass back into an Intent and close this activity
+            val intent = Intent()
+            setResult(Activity.RESULT_OK, intent)
             finish()
         }
 

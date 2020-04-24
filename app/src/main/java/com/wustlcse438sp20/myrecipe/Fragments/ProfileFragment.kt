@@ -1,5 +1,6 @@
 package com.wustlcse438sp20.myrecipe.Fragments
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -43,7 +44,7 @@ class ProfileFragment : Fragment() {
     private lateinit var adapter: CollectionAdapter
     private var user_email = ""
     private lateinit var db: FirebaseFirestore
-    private var onResumeFlag: Boolean = false
+    private val SECOND_ACTIVITY_REQUEST_CODE = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +56,6 @@ class ProfileFragment : Fragment() {
 
         val activity_intent = activity!!.intent
         //user_email = activity_intent!!.extras!!.getString("user_email")!!
-        Log.v("全局变量传过来啦", user_email)
 
         // set an instance of firebase
         db = FirebaseFirestore.getInstance()
@@ -161,51 +161,44 @@ class ProfileFragment : Fragment() {
                 bundle.putString("collectionId",collectionList[position].id)
                 //bundle.putString("user_email",user_email)
                 intent.putExtras(bundle)
-                activity?.startActivity(intent)
+                //activity?.startActivity(intent)
+                startActivityForResult(intent,SECOND_ACTIVITY_REQUEST_CODE)
             }
         })
 
 
         edit_profile_button.setOnClickListener() {
             val intent = Intent(context, EditProfileActivity::class.java)
-            //var bundle=Bundle()
-            //bundle.putString("user_email",user_email)
-            //intent.putExtras(bundle)
-            activity?.startActivity(intent)
+            startActivityForResult(intent,SECOND_ACTIVITY_REQUEST_CODE)  // call it from fragment itself, not from activity
         }
 
         add_collection_button.setOnClickListener(){
             val intent = Intent(context, AddCollectionActivity::class.java)
-//            var bundle=Bundle()
-//            bundle.putString("user_email",user_email)
-//            intent.putExtras(bundle)
-            activity?.startActivity(intent)
+            startActivityForResult(intent,SECOND_ACTIVITY_REQUEST_CODE)
         }
 
         // display profile and collections
         updateDisplay()
     }
 
-    override fun onPause() {
-        super.onPause()
-        onResumeFlag = true
-    }
+    // This method is called when the second activity finishes
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-
-    override fun onResume() {
-        super.onResume()
-
-        if(onResumeFlag){
-            var mUpdatePageHandler: Handler = Handler()
-            mUpdatePageHandler.postDelayed(kotlinx.coroutines.Runnable {
-                var globalVariable = getActivity()?.getApplicationContext() as MyApplication
-                user_email = globalVariable.getEmail()!!
-                // display profile and collections
-                updateDisplay()
-            },1000)
+        // Check that it is the SecondActivity with an OK result
+        if (requestCode == SECOND_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+//                val myreturn = data?.extras?.getString("return")
+                // update the ui
+                var mUpdatePageHandler: Handler = Handler()
+                mUpdatePageHandler.postDelayed(kotlinx.coroutines.Runnable {
+                    var globalVariable = getActivity()?.getApplicationContext() as MyApplication
+                    user_email = globalVariable.getEmail()!!
+                    // display profile and collections
+                    updateDisplay()
+                },1000)
+            }
         }
     }
-
-
 }
 

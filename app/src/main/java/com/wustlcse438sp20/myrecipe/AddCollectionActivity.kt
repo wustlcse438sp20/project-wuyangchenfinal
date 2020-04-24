@@ -1,5 +1,7 @@
 package com.wustlcse438sp20.myrecipe
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -80,7 +82,9 @@ class AddCollectionActivity : AppCompatActivity() {
                     .addOnFailureListener(OnFailureListener { e ->
                         Toast.makeText(this, "Failed to create collection in the database!", Toast.LENGTH_LONG)
                     })
-
+                // Put the String to pass back into an Intent and close this activity
+                val intent = Intent()
+                setResult(Activity.RESULT_OK, intent)
                 finish()
             }else{
                 Toast.makeText(this,"Please Input the valid content",Toast.LENGTH_SHORT).show()
@@ -89,6 +93,9 @@ class AddCollectionActivity : AppCompatActivity() {
         }
 
         cancel_collection_button.setOnClickListener(){
+            // Put the String to pass back into an Intent and close this activity
+            val intent = Intent()
+            setResult(Activity.RESULT_OK, intent)
             finish()
         }
     }

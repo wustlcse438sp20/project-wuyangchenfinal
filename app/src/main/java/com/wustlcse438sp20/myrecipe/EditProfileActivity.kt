@@ -138,6 +138,9 @@ class EditProfileActivity : AppCompatActivity() {
                     .addOnFailureListener { exception ->
                         Log.w("TAG", "Error getting documents: ", exception)
                     }
+                // Put the String to pass back into an Intent and close this activity
+                val intent = Intent()
+                setResult(Activity.RESULT_OK, intent)
                 finish()
             }
             else{
@@ -146,6 +149,10 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
         cancel_profile_button.setOnClickListener(){
+            // Put the String to pass back into an Intent and close this activity
+            val intent = Intent()
+            intent.putExtra("return","返回返回返回")
+            setResult(Activity.RESULT_OK, intent)
             finish()
         }
 
