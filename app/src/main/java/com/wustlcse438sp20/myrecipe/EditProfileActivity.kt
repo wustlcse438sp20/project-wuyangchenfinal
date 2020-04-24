@@ -125,6 +125,10 @@ class EditProfileActivity : AppCompatActivity() {
                                         "Database Update",
                                         "successfully update user profile"
                                     )
+                                    // Put the String to pass back into an Intent and close this activity
+                                    val intent = Intent()
+                                    setResult(Activity.RESULT_OK, intent)
+                                    finish()
                                 }
                                 .addOnFailureListener { e ->
                                     Log.w(
@@ -138,10 +142,7 @@ class EditProfileActivity : AppCompatActivity() {
                     .addOnFailureListener { exception ->
                         Log.w("TAG", "Error getting documents: ", exception)
                     }
-                // Put the String to pass back into an Intent and close this activity
-                val intent = Intent()
-                setResult(Activity.RESULT_OK, intent)
-                finish()
+
             }
             else{
                 Toast.makeText(this,"Please Input the valid content",Toast.LENGTH_SHORT).show()
