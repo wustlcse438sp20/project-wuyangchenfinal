@@ -34,10 +34,7 @@ Features:
 3. The app will alert the user what nutrients he/she lacks from previous meals, and recommend recipes that are rich in these nutrients to the user
 
 
-In this file you should include:
-
-Any information you think we should know about your submission
-
+- Additional notes
 It can't be said issues but some imperfect performances because of APIs.
 The first is that imageUrl returned by API may be null, so we do judgement and using another image when it returns an empty imageUrl.
 The second is that smart meal page has no photho shown with recipes because the API used to return the imageUrl but now there is no imageUrl.
