@@ -1,9 +1,14 @@
-App Name: MyRecipe
-Team Members: Haoyu Wu
-              Ruoyao Yang
-              Jialun Chen
+- App Name: MyRecipe
 
-Project Description
+- Project final presentation slides  
+https://docs.google.com/presentation/d/1KVR0hTI3Wg_qbYvfZUW8Rcjv6XK3JwBg_l-_jfQvj7A/edit?usp=sharing
+
+- Project Demo  
+https://drive.google.com/file/d/1BTRxnBoCPFLFdOFTlIWhS1t8D2HJ7dsT/view?usp=sharing
+
+- Team Members: Haoyu Wu, Ruoyao Yang, Jialun Chen
+
+- Project Description  
 Motivation:
 During the special virus quarantine period, most people enjoy cooking and exploring recipes, and keeping track of food intake is an important way to stay healthy.
 Therefore, we decide to build an app that can search recipes with our available ingredients at home, and add recipes we're interested in to our own Favorite collections. We can also customize personal meal plan in this app to keep track of nutrients and calories intake.
